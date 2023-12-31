@@ -30,7 +30,7 @@ with open('requirements.txt', 'r') as f:
 
 ## IDE
 
-### VS Code Extensions
+### VS Code extensions
 
 - [Shiny for Python](https://marketplace.visualstudio.com/items?itemName=posit.shiny-python)
 

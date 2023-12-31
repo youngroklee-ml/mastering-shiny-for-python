@@ -1,6 +1,6 @@
 # Your first Shiny app {#basic-app}
 
-## Create App Directory and File
+## Create app directory and file
 
 ```{.python filename='examples/basic-app/hello-world/app.py'}
 from shiny import App, ui
@@ -15,9 +15,9 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
-## Running and Stopping
+## Running and stopping
 
-### Run App
+### Run app
 
 - Click 'Run Shiny App' button on VS Code that comes with [Shiny for Python extension](https://marketplace.visualstudio.com/items?itemName=posit.shiny-python)
 
@@ -25,12 +25,12 @@ app = App(app_ui, server)
 
 - In terminal, like zsh, type `shiny run {filename}` where `{filename}` should be replaced with python filename with its path, e.g. `shiny run examples/basic-app/hello-world/app.py`
 
-### Stop the App
+### Stop the app
 
 In terminal that Shiny is running, press Ctrl+C
 
 
-## Adding UI Controls
+## Adding UI controls
 
 UI controls are included in `ui` subpackage.
 
@@ -65,7 +65,7 @@ Here, in `ui.input_select()`, please note that I used `choices=list(data()['data
 :::
 
 
-## Adding Behavior
+## Adding behavior
 
 Adding behavior requires including server logics. It requires functions in `render` subpackage, so I additionally imported `render`.
 
@@ -101,7 +101,7 @@ Shiny for Python uses decorators `@render.*` and `@output`. The render decorator
 
 
 
-## Reducing Duplication with Reactive Expressions
+## Reducing duplication with reactive expressions
 
 Reactive expression requires `reactive` subpackage, so I additionally imported `reactive`.
 
