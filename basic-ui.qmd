@@ -298,7 +298,7 @@ app = App(app_ui, server)
 ```
 
 ::: {.callout-note}
-While you can return just `mtcars` in `dynamic()` for default interactive table, to enable filters, either `render.DataGrid()` or `render.DataTable()` needs to be returned with `fitler=True`.
+While you can return just `mtcars` in `dynamic()` for default interactive table, to enable filters, either `render.DataGrid()` or `render.DataTable()` needs to be returned with `filter=True`.
 :::
 
 ::: {.callout-note}
