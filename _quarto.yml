@@ -8,6 +8,7 @@ book:
   chapters:
     - index.qmd
     - basic-app.qmd
+    - basic-ui.qmd
 
 number-sections: false
 

@@ -1,0 +1,156 @@
+# Basic UI
+
+## Inputs
+
+### Common structure
+
+All input functions have the same first two argument:
+
+- `id`: the identifier used to connect the frontend with the backend: if your UI has an input with `id="name"`, the server function will access it with `input.name()`.
+- `label`: human-readable label for the control to appear on a web browser.
+
+### Free Text
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_text("name", "What's your name?"),
+    ui.input_password("password", "What's your password?"),
+    ui.input_text_area("story", "Tell me about yourself", rows=3),
+)
+```
+
+### Numeric inputs
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_numeric("num", "Number one", value=0, min=0, max=100),
+    ui.input_slider("num2", "Number two", value=50, min=0, max=100),
+    ui.input_slider("rng", "Range", value=(10, 20), min=0, max=100),
+)
+```
+
+::: {.callout-note}
+For range slider, `value` argument can be a list (i.e. `value=[10, 20]`) instead of tuple, but in server function, `input.rng()` will be still return a tuple instead of a list.
+:::
+
+
+### Dates
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_date("dob", "When were you born?"),
+    ui.input_date_range("holiday", "When do you want to go on vacation next?"),
+)
+```
+
+
+### Limited choices
+
+Input controls for limited choices require `choices` argument to allow the user to choose from.
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+state_names=[
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", 
+    "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", 
+    "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", 
+    "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", 
+    "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", 
+    "New Hampshire", "New Jersey", "New Mexico", "New York", 
+    "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", 
+    "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", 
+    "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", 
+    "West Virginia", "Wisconsin", "Wyoming"]
+
+animals = ["dog", "cat", "mouse", "bird", "other", "I hate animals"]
+```
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_select("state", "What's your favourite states?", choices=state_names,
+    ui.input_radio_buttons("animal", "What's your favourite animals?", choices=animals),
+)
+```
+
+`choices` can be a dictionary instead of a list. In such cases, value is displayed on a screen, but key is retrieved when the input is accessed from a server function.
+
+For example to show icon on screen, let us use [`faicons` package](https://pypi.org/project/faicons/), which provides an interface to [Font-Awesome](https://fontawesome.com/) for use in Shiny for Python.
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+from faicons import icon_svg
+
+app_ui = ui.page_fluid(
+    ui.input_radio_buttons("rb", "Choose one:", choices={
+        "angry": icon_svg("face-angry"), "happy": icon_svg("face-smile"), "sad": icon_svg("face-sad-tear")}),
+)
+```
+
+::: {.callout-note}
+On app, icons appear on each radio button items. However, when you call `input.rb()` in a server, it returns key values `"angry"`, `"happy"`, or `"sad"` based on which item was chosen by a user.
+::: 
+
+
+`ui.input_select()` and `ui.input_selectize()` allow a user to select multiple items when `multiple=True`. 
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_selectize("states", "What's your favourite states?", choices=state_names, multiple=True),
+)
+```
+
+Radio button allows only a single item selection. Mutliple selection can be done through alternative control: `ui.input_checkbox_group()`.
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_checkbox_group("animals", "What animals do you like?", choices=animals),
+)
+```
+
+Single checkbox `ui.input_checkbox()` is for Yes/No questions.
+
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_checkbox("cleanup", "Clean up?", value=True),
+    ui.input_checkbox("shutdown", "Shutdown?"),
+)
+```
+
+### File uploads
+
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_file("upload", None),
+)
+```
+
+### Action buttons
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_action_button("click", "Click me!"),
+    ui.input_action_button("drink", "Drink me!", icon=icon_svg("martini-glass-citrus")),
+)
+```
+
+You can customise the appearance using the `class_` argument.
+
+```{.python filename='examples/basic-ui/inputs/app.py'}
+app_ui = ui.page_fluid(
+    ui.input_action_button("clickdanger", "Click me!", class_="btn-danger"),
+    ui.input_action_button("drinklarge", "Drink me!", class_="btn-lg btn-success"),
+    ui.br(),
+    ui.input_action_button("eat", "Eat me!", class_="w-100"),
+)
+```
+
+::: {.callout-important}
+`ui.br()` is to create `<br>` HTML tag which is a line break syntax.
+:::
+
+
+::: {.callout-note}
+In Mastering Shiny book, there is also example with class name `btn-block` to create full-width block buttons. It does not work in shiny package in python with version `0.6.1.1`. I do not know the reason, but I **guess** that it may be because Shiny for Python is based on [Bootstrap v5](https://getbootstrap.com/docs/5.2/components/buttons/#block-buttons) that implement block buttons not through class but through layout. As a stop-gap solution for this example, I used class name `w-100` from [sizing classes](https://getbootstrap.com/docs/5.0/utilities/sizing/).
+:::
+
+

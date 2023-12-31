@@ -22,6 +22,7 @@ debugpy==1.8.0
 decorator==5.1.1
 defusedxml==0.7.1
 executing==2.0.1
+faicons==0.2.1
 fastjsonschema==2.19.1
 fonttools==4.47.0
 fqdn==1.5.1
