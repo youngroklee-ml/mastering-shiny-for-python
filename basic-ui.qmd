@@ -154,3 +154,86 @@ In Mastering Shiny book, there is also example with class name `btn-block` to cr
 :::
 
 
+### Exercises
+
+1. Label text boxes using a placeholder that appears inside the text entry area.
+
+```{.python filename='solutions/basic-ui/inputs/placeholder/app.py'}
+from shiny import App, ui
+
+app_ui = ui.page_fluid(
+    ui.input_text("name", None, placeholder="Your name"),
+)
+
+def server(input, output, session):
+    ...
+
+app = App(app_ui, server)
+```
+
+2. Create a date slider.
+
+```{.python filename='solutions/basic-ui/inputs/dateslider/app.py'}
+from shiny import App, ui
+import datetime
+
+app_ui = ui.page_fluid(
+    ui.input_slider("date", "When should we deliver?",
+                    min=datetime.date(2020, 9, 16),
+                    max=datetime.date(2020, 9, 23),
+                    value=datetime.date(2020, 9, 17)),
+)
+
+def server(input, output, session):
+    ...
+
+app = App(app_ui, server)
+```
+
+3. Create a slider input to select values between 0 and 100 where the interval between each selectable value on the slider is 5. Then, add animation to the input widget so when the user presses play the input widget scrolls through the range automatically.
+
+```{.python filename='solutions/basic-ui/inputs/animateslider/app.py'}
+from shiny import App, ui
+
+app_ui = ui.page_fluid(
+    ui.input_slider("ani", None, min=0, max=100, value=0,
+                    step=5, animate=True, ticks=True),
+)
+
+def server(input, output, session):
+    ...
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+`ticks=True` is not an essential argument for this exercise, but it guides a user to click a right position when selecting a number.
+:::
+
+
+4. Create sub-headings that break the list up into pieces.
+
+```{.python filename='solutions/basic-ui/inputs/subheading/app.py'}
+from shiny import App, ui
+
+grouped = {
+    "Group A": {"A1":"Item A1", "A2":"Item A2"},
+    "Group B": {"B1":"Item B1", "B2":"Item B2", "B3":"Item B3"},
+    "Group C": {"C1":"Item C1", "C2":"Item C2"}
+}
+
+app_ui = ui.page_fluid(
+    ui.input_select("long", "Choose:", choices=grouped),
+)
+
+def server(input, output, session):
+    ...
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+A dictionary of dictionaries used as `choices` argument. It would mean that server will use keys (e.g. `"A1"`) as input values instead of appeared string (e.g. `"Item A1"`), so keys would need to be unique not only within a subgroup but also across subgroups.
+:::
+
+
