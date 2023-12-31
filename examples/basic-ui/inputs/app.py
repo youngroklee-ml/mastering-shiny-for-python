@@ -1,4 +1,4 @@
-from shiny import App, ui, render
+from shiny import App, ui
 from faicons import icon_svg
 
 state_names=[
@@ -51,14 +51,9 @@ app_ui = ui.page_fluid(
     ui.input_action_button("drinklarge", "Drink me!", class_="btn-lg btn-success"),
     ui.br(),
     ui.input_action_button("eat", "Eat me!", class_="w-100"),
-    # output
-    ui.output_text("txt")
 )
 
 def server(input, output, session):
-    @output
-    @render.text
-    def txt():
-        return input.drinklarge()
+    ...
 
 app = App(app_ui, server)
