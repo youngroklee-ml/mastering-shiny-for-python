@@ -237,3 +237,92 @@ A dictionary of dictionaries used as `choices` argument. It would mean that serv
 :::
 
 
+## Outputs
+
+### Text
+
+```{.python filename='examples/basic-ui/outputs/text/app.py'}
+from shiny import App, ui, render
+import pandas as pd
+
+app_ui = ui.page_fluid(
+    ui.output_text("text"),
+    ui.output_text_verbatim("code"),
+)
+
+def server(input, output, session):
+    @output
+    @render.text
+    def text():
+        return "Hello friend!"
+    
+    @output
+    @render.text
+    def code():
+        x = pd.Series(range(1, 11))
+        return x.describe()
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+In R, text output uses render function `renderText()` and verbatim output uses render function `renderPrint()`. In Python, both text and verbatim outputs use the same render function `render.text()`.
+:::
+
+
+### Tables
+
+```{.python filename='examples/basic-ui/outputs/tables/app.py'}
+from shiny import App, ui, render
+from pydataset import data
+
+mtcars = data("mtcars")
+
+app_ui = ui.page_fluid(
+    ui.output_table("static"),
+    ui.output_data_frame("dynamic"),
+)
+
+def server(input, output, session):
+    @output
+    @render.table
+    def static():
+        return mtcars
+    
+    @output
+    @render.data_frame
+    def dynamic():
+        return render.DataTable(mtcars, filters=True)
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+While you can return just `mtcars` in `dynamic()` for default interactive table, to enable filters, either `render.DataGrid()` or `render.DataTable()` needs to be returned with `fitler=True`.
+:::
+
+::: {.callout-note}
+The dynamic table is somewhat different from R version. There may be more ways to render tables by using [widgets](https://shiny.posit.co/py/docs/ipywidgets.html).
+:::
+
+
+### Plots
+
+```{.python filename='examples/basic-ui/outputs/plots/app.py'}
+from shiny import App, ui, render
+from matplotlib import pyplot as plt
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", width="400px")
+)
+
+def server(input, output, session):
+    @output
+    @render.plot
+    def plot():
+        return plt.scatter([1, 2, 3, 4, 5], [1, 2, 3, 4, 5])
+
+app = App(app_ui, server)
+```
+
+
