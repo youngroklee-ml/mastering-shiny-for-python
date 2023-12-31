@@ -1,0 +1,36 @@
+# Preface {.unnumbered}
+
+This book is to reproduce Hadley Wickham's [Mastering Shiny](https://mastering-shiny.org) examples and exerciese solutions in Python.
+
+The followings are reference materials:
+
+- [Mastering Shiny](https://mastering-shiny.org) by Hadley Wickham
+- [Learn Shiny](https://shiny.posit.co/py/docs/overview.html) by Posit Inc. on Shiny for Python website
+- [Shiny R to Python translation guide](https://gist.github.com/wch/616934a6fe57636434154c112ac8a718) by Winston Chang
+- [Change Log for Shiny for Python](https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md)
+
+
+Computation environment is as follows:
+
+## Python 
+
+### Python version
+
+```{python} 
+!python --version
+```
+
+### Packages
+
+```{python}
+with open('requirements.txt', 'r') as f:
+    print(f.read())
+```
+
+
+## IDE
+
+### VS Code Extensions
+
+- [Shiny for Python](https://marketplace.visualstudio.com/items?itemName=posit.shiny-python)
+

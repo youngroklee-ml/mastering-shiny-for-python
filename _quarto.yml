@@ -1,0 +1,19 @@
+project:
+  type: book
+
+book:
+  title: "Mastering Shiny Examples and Solutions for Python"
+  author: "Youngrok Lee"
+  date: today
+  chapters:
+    - index.qmd
+    - basic-app.qmd
+
+number-sections: false
+
+format:
+  html:
+    theme: cosmo
+
+
+

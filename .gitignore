@@ -1,0 +1,9 @@
+_book/
+/.quarto/
+/.venv/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+.DS_store
