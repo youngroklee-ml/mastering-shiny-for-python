@@ -99,6 +99,18 @@ In this example, inside `server()` function, there are two functions that have s
 
 Shiny for Python uses decorators `@render.*` and `@output`. The render decorator should be chosen to be consistent with output control type in UI.
 
+::: {.callout-tip}
+In case you need to name a server-side function differently from output control ID, you can use `id` argument in `@output` decorator like below:
+
+```{.python}
+    @output(id="summary")
+    @render.text
+    def print_summary():
+        dataset = data(input.dataset())
+        return dataset.describe()
+```
+:::
+
 
 
 ## Reducing duplication with reactive expressions
