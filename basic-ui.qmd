@@ -325,4 +325,118 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
+### Exercises
+
+1. Text outputs and verbatim outputs
+
+```{.python}
+from shiny import App, ui, render
+from pydataset import data
+from scipy.stats import ttest_ind
+import statsmodels.formula.api as smf
+
+mtcars = data("mtcars")
+
+app_ui = ui.page_fluid(
+    ui.output_text_verbatim("summary"),
+    ui.output_text("greeting"),
+    ui.output_text_verbatim("ttest"),
+    ui.output_text_verbatim("regression"),
+)
+
+def server(input, output, session):
+    @output
+    @render.text
+    def summary():
+        return mtcars.describe()
+    
+    @output
+    @render.text
+    def greeting():
+        return "Good morning!"
+    
+    @output
+    @render.text
+    def ttest():
+        return ttest_ind([1, 2, 3, 4, 5], [2, 3, 4, 5, 6])
+    
+    @output
+    @render.text
+    def regression():
+        reg = smf.ols("mpg ~ wt", data=mtcars).fit()
+        return reg.summary()
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+Shiny for Python use `render.text()` for both text output and verbatim output.
+:::
+
+::: {.callout-note}
+`mtcars.describe()` returns pandas data frame. When `render.text()` is used, the output will look like a result of `print(mtcars.describe())`.
+:::
+
+
+2. Plot by seeting height to 300px, witdh to 700px, and "alt" text so that a visually impaired user can tell that its a scatterplot of five random numbers.
+
+
+```{.python filename='solutions/basic-ui/outputs/plots/app.py'}
+from shiny import App, ui, render
+from matplotlib import pyplot as plt
+import numpy as np
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", width="700px", height="300px")
+)
+
+def server(input, output, session):
+    @output
+    @render.plot(alt="A scatterplot of five random numbers")
+    def plot():
+        return plt.scatter(np.random.uniform(size=5), np.random.uniform(size=5))
+    
+app = App(app_ui, server)
+```
+
+
+3. Dynamic data table without search, search, ordering, and filtering commands.
+
+```{.python filename='solutions/basic-ui/outputs/tables/app.py'}
+from shiny import App, ui, render
+from pydataset import data
+
+mtcars = data("mtcars")
+
+app_ui = ui.page_fluid(
+    ui.output_data_frame("dynamic"),
+)
+
+def server(input, output, session):
+    @output
+    @render.data_frame
+    def dynamic():
+        return render.DataTable(mtcars, filters=False, height='240px')
+
+app = App(app_ui, server)
+```
+
+::: {.callout-warning}
+The rendered table still provides ordering commands. I do not know how to disable the ordering command with built-in render functions in `shiny` python package.
+:::
+
+
+4. Use React Table.
+
+::: {.callout-caution}
+I could not find a way to render React Table or any other interactive tables that are not included in shiny package.
+
+I attemped to use ipywidgets via [shinywidgets](https://shiny.posit.co/py/docs/ipywidgets.html), but my attempt was not quite successful and satisfiable.
+
+It looks there have been [related discussions on github](https://github.com/posit-dev/py-shinywidgets/issues/54).
+
+I hope to come back this exercise once I find a solution.
+:::
+
+
 
