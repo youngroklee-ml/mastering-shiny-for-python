@@ -111,6 +111,25 @@ In case you need to name a server-side function differently from output control 
 ```
 :::
 
+::: {.callout-important}
+`@output` decorator is no longer required since v0.6.0 released on 2023-10-30, unless you need to set specific output option (e.g. `id`). Please see more details: [Change Log for Shiny for Python](https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md).
+
+The server function can be simplified as follows:
+
+```{.python}
+def server(input, output, session):
+    @render.text
+    def summary():
+        dataset = data(input.dataset())
+        return dataset.describe()
+    
+    @render.table
+    def table():
+        dataset = data(input.dataset())
+        return dataset
+```
+:::
+
 
 
 ## Reducing duplication with reactive expressions
