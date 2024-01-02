@@ -9,6 +9,7 @@ book:
     - index.qmd
     - basic-app.qmd
     - basic-ui.qmd
+    - basic-reactivity.qmd
 
 number-sections: false
 

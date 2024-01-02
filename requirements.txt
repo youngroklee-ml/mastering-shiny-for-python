@@ -64,6 +64,7 @@ matplotlib-inline==0.1.6
 mdit-py-plugins==0.4.0
 mdurl==0.1.2
 mistune==3.0.2
+mizani==0.9.3
 nbclient==0.9.0
 nbconvert==7.13.1
 nbformat==5.9.2
@@ -80,6 +81,7 @@ patsy==0.5.5
 pexpect==4.9.0
 Pillow==10.1.0
 platformdirs==4.1.0
+plotnine==0.12.4
 prometheus-client==0.19.0
 prompt-toolkit==3.0.36
 psutil==5.9.7
