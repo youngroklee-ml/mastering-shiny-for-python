@@ -19,9 +19,9 @@ def t_test(x1, x2):
     test = ttest_ind(x1, x2)
     return f"p value: {test.pvalue:.3f}\n[{test.confidence_interval().low:.2f}, {test.confidence_interval().high:.2f}]"
 
-# x1 = np.random.normal(0, 0.5, size=100)
-# x2 = np.random.normal(0.15, 0.9, size=200)
+x1 = np.random.normal(0, 0.5, size=100)
+x2 = np.random.normal(0.15, 0.9, size=200)
 
-# freqpoly(x1, x2)
-# print(t_test(x1, x2))
+freqpoly(x1, x2)
+print(t_test(x1, x2))
 
