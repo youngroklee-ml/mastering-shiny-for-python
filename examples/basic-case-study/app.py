@@ -87,12 +87,11 @@ def server(input, output, session):
     @reactive.calc
     @reactive.event(input.story, selected)
     def narrative_sample():
-        return selected()['narrative'].sample(1).to_string()
+        return selected()['narrative'].sample(1).squeeze()
 
     @render.text
     def narrative():
         return narrative_sample()
-        # return "16YOM TRIPPED OVER A RUG AND FELL INTO A BURNING FIREPLACEDX BURNS INVOLVING LESS THAN 10% OF BODY SURFACE, FOREARM"
     
 
 app = App(app_ui, server)
