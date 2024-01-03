@@ -10,6 +10,7 @@ book:
     - basic-app.qmd
     - basic-ui.qmd
     - basic-reactivity.qmd
+    - basic-case-study.qmd
 
 number-sections: false
 
