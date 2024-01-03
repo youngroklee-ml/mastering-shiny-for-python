@@ -10,3 +10,6 @@ __pycache__/
 
 # exclude experimental ones
 *.qmd_
+
+# exclude data folder
+neiss/
