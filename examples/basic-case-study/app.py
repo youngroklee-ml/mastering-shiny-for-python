@@ -18,8 +18,9 @@ prod_codes = dict(zip(products['prod_code'], products['title']))
 def count_top(df, var, n=5):
     df = df.copy()
     freq = df.value_counts(var)[:n].index.values
-    df[var] = np.where(np.isin(df[var], freq), df[var], "Other")
-    res = df.groupby([var]).agg(n=('weight', 'sum')).sort_values('n', ascending=False).reset_index()
+    df[var] = pd.Categorical(np.where(np.isin(df[var], freq), df[var], "Other"), 
+                             categories=list(freq)+["Other"], ordered=True)
+    res = df.groupby([var], observed=False).agg(n=('weight', 'sum')).reset_index()
     res['n'] = res['n'].astype(np.int64)
     return res
 
