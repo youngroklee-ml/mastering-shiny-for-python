@@ -144,7 +144,7 @@ app_ui = ui.page_fluid(
 )
 ```
 
-::: {.callout-important}
+::: {.callout-note}
 `ui.br()` is to create `<br>` HTML tag which is a line break syntax.
 :::
 
