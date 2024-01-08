@@ -8,11 +8,14 @@ book:
   chapters:
     - index.qmd
     - part: "Getting Started"
+      chapters:
       - basic-app.qmd
       - basic-ui.qmd
       - basic-reactivity.qmd
       - basic-case-study.qmd
     - part: "Shiny in Action"
+      chapters:
+      - action-workflow.qmd
   repo-url: https://github.com/youngroklee-ml/mastering-shiny-for-python
   repo-actions: [edit, issue]
 
