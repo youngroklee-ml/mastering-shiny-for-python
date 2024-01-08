@@ -4,7 +4,7 @@
 
 ### Creating the app
 
-- On VS code, if you already have your future *app.py* open, type **`shinyapp`**, then press Shift+Tab to insert the shiny app snippet.
+- On VS code, if you already have your future *app.py* open, type **`shinyapp`**, then press Tab to insert the shiny app snippet.
 
 ```{.python filename='examples/action-workflow/snippet/app.py'}
 from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
@@ -240,6 +240,11 @@ app = App(app_ui, server)
 ::: {.callout-note}
 When using `sys.stderr.write()`, please include newline character `\n` at the end of message.
 :::
+
+::: {.callout-note}
+Dynamic UI implementation with `ui.update_*()` in the server function will be discussed in later chapter.
+:::
+
 
 
 The third option, `logging`, may provide more flexibility including setting the threshold of logging, e.g. `'INFO'`, `'WARNING'`, etc.
