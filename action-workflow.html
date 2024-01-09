@@ -236,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="creating-the-app" class="level3">
 <h3 class="anchored" data-anchor-id="creating-the-app">Creating the app</h3>
 <ul>
-<li>On VS code, if you already have your future <em>app.py</em> open, type <strong><code>shinyapp</code></strong>, then press Shift+Tab to insert the shiny app snippet.</li>
+<li>On VS code, if you already have your future <em>app.py</em> open, type <strong><code>shinyapp</code></strong>, then press Tab to insert the shiny app snippet.</li>
 </ul>
 <div class="code-with-filename">
 <div class="code-with-filename-file">
@@ -309,7 +309,7 @@ Note
 <span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> h(x)</span>
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> h(x):</span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x <span class="op">^</span> <span class="dv">2</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> x<span class="op">**</span><span class="dv">2</span></span>
 <span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
 <span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    ui.input_select(<span class="st">"n"</span>, <span class="st">"N"</span>, <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>))),</span>
@@ -336,7 +336,7 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Instead of <code>x * 2</code> in R example in the book, I used <code>x ^ 2</code> as return value of function <code>h(x)</code> to cause an error when function <code>f()</code> is called in the app. If we write <code>def h(x): return x * 2</code>, it will cause an error not when calling <code>f()</code> but when slicing data frame with <code>cars[:n]</code>.</p>
+<p>Instead of <code>x * 2</code> in R example in the book, I used <code>x**2</code> as return value of function <code>h(x)</code> to cause an error when function <code>f()</code> is called in the app. If we write <code>def h(x): return x * 2</code>, it will cause an error not when calling <code>f()</code> but when slicing data frame with <code>cars[:n]</code>.</p>
 </div>
 </div>
 <p>If you run this app, you’ll see an error message in the app and a traceback in the console:</p>
@@ -533,6 +533,19 @@ Note
 </div>
 <div class="callout-body-container callout-body">
 <p>When using <code>sys.stderr.write()</code>, please include newline character <code>\n</code> at the end of message.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Dynamic UI implementation with <code>ui.update_*()</code> in the server function will be discussed in later chapter.</p>
 </div>
 </div>
 <p>The third option, <code>logging</code>, may provide more flexibility including setting the threshold of logging, e.g.&nbsp;<code>'INFO'</code>, <code>'WARNING'</code>, etc.</p>
