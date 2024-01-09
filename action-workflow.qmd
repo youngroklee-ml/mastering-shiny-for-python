@@ -55,7 +55,7 @@ def g(x):
     return h(x)
 
 def h(x):
-    return x ^ 2
+    return x**2
 
 app_ui = ui.page_fluid(
     ui.input_select("n", "N", list(range(1, 11))),
@@ -74,7 +74,7 @@ app = App(app_ui, server)
 ```
 
 ::: {.callout-note}
-Instead of `x * 2` in R example in the book, I used `x ^ 2` as return value of function `h(x)` to cause an error when function `f()` is called in the app. If we write `def h(x): return x * 2`, it will cause an error not when calling `f()` but when slicing data frame with `cars[:n]`.
+Instead of `x * 2` in R example in the book, I used `x**2` as return value of function `h(x)` to cause an error when function `f()` is called in the app. If we write `def h(x): return x * 2`, it will cause an error not when calling `f()` but when slicing data frame with `cars[:n]`.
 :::
 
 If you run this app, you'll see an error message in the app and a traceback in the console:
