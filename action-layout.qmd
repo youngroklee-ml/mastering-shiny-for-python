@@ -1,0 +1,185 @@
+# Layout, themes, HTML
+
+## Single page layout
+
+### Page with sidebar
+
+The following app that use `ui.panel_sidebar()` and `ui.panel_main()` provides a similar-looking app the Mastering Shiny book example.  
+
+```{.python filename='examples/action-layout/sidebar/app-panel.py'}
+from shiny import App, ui, render
+import numpy as np
+from matplotlib import pyplot as plt
+
+app_ui = ui.page_fluid(
+    ui.panel_title("Central limit theorem"),
+    ui.layout_sidebar(
+        ui.panel_sidebar(
+            ui.input_numeric("m", "Number of samples:", 2, min=1, max=100),
+        ),
+        ui.panel_main(
+            ui.output_plot("hist"),
+        ),        
+    ),
+)
+
+def server(input, output, session):
+    @render.plot
+    def hist():
+        means = [np.mean(np.random.uniform(size=input.m())) for _ in range(10000)]
+
+        fig, ax = plt.subplots()
+        ax.hist(means, bins=20)
+        return fig
+    
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+`ui.panel_sidebar()` and `ui.panel_main()` have been deprecated since 2023-10-30 release. Per recommendation in the [change log](https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md), in `ui.layout_sidebar()` call, I used `sidebar()` as `sidebar` arguement and passed main panel contents directly to `args`.
+:::
+
+
+`ui.panel_sidebar()` and `ui.panel_main()` have been deprecated since 2023-10-30 release, and the following code is based on newly recommended sidebar implementation.
+
+
+```{.python filename='examples/action-layout/sidebar/app.py'}
+from shiny import App, ui, render
+import numpy as np
+from matplotlib import pyplot as plt
+
+app_ui = ui.page_fluid(
+    ui.panel_title("Central limit theorem"),
+    ui.layout_sidebar(
+        ui.sidebar(
+            ui.input_numeric("m", "Number of samples:", 2, min=1, max=100)
+        ),
+        ui.output_plot("hist"),
+    ),
+)
+
+def server(input, output, session):
+    @render.plot
+    def hist():
+        means = [np.mean(np.random.uniform(size=input.m())) for _ in range(10000)]
+
+        fig, ax = plt.subplots()
+        ax.hist(means, bins=20)
+        return fig
+    
+app = App(app_ui, server)
+```
+
+
+
+### Exercises
+
+1. Re-create sidebar layout app's appearance using `ui.row()` and `ui.column()`.
+
+```{.python filename='solutions/action-layout/recreate-sidebar/app.py'}
+from shiny import App, ui, render
+import numpy as np
+from matplotlib import pyplot as plt
+
+app_ui = ui.page_fluid(
+    ui.panel_title("Central limit theorem"),
+    ui.row(
+        ui.column(4,
+            ui.input_numeric("m", "Number of samples:", 2, min=1, max=100),
+        ),
+        ui.column(8,
+            ui.output_plot("hist"),
+        ),
+    ),
+)
+
+def server(input, output, session):
+    @render.plot
+    def hist():
+        means = [np.mean(np.random.uniform(size=input.m())) for _ in range(10000)]
+
+        fig, ax = plt.subplots()
+        ax.hist(means, bins=20)
+        return fig
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+This app approximately recreates appearance of an old-style app that uses `ui.panel_sidebar()` and `ui.panel_main()`, but not a new-style app that uses `ui.sidebar()`.
+:::
+
+
+
+2. Modify the central limit theorem app to put the sidebar on the right instead of the left.
+
+
+```{.python filename='solutions/action-layout/right-sidebar/app.py'}
+from shiny import App, ui, render
+import numpy as np
+from matplotlib import pyplot as plt
+
+app_ui = ui.page_fluid(
+    ui.panel_title("Central limit theorem"),
+    ui.layout_sidebar(
+        ui.sidebar(
+            ui.input_numeric("m", "Number of samples:", 2, min=1, max=100),
+            position='right',
+        ),
+        ui.output_plot("hist"),
+    ),
+)
+
+def server(input, output, session):
+    @render.plot
+    def hist():
+        means = [np.mean(np.random.uniform(size=input.m())) for _ in range(10000)]
+
+        fig, ax = plt.subplots()
+        ax.hist(means, bins=20)
+        return fig
+    
+app = App(app_ui, server)
+```
+
+
+3. Create multirow layout app with two plots
+
+```{.python filename='solutions/action-layout/multirow/app.py'}
+from shiny import App, ui, render, reactive
+import numpy as np
+from matplotlib import pyplot as plt
+
+app_ui = ui.page_fluid(
+    ui.panel_title("Central limit theorem"),
+    ui.row(
+        ui.column(6, 
+            ui.output_plot("hist"),
+        ),
+        ui.column(6,
+            ui.output_plot("freqploy"),
+        ),
+    ),
+    ui.row(
+        ui.input_numeric("m", "Number of samples:", 2, min=1, max=100),
+    ),
+)
+
+def server(input, output, session):
+    @reactive.calc
+    def means():
+        return [np.mean(np.random.uniform(size=input.m())) for _ in range(10000)]
+
+    @render.plot
+    def hist():
+        fig, ax = plt.subplots()
+        ax.hist(means(), bins=20)
+        return fig
+    
+    @render.plot
+    def freqploy():
+        counts, bins = np.histogram(means(), bins=20)
+        return plt.plot(bins[:-1], counts)
+    
+app = App(app_ui, server)
+```
