@@ -322,3 +322,97 @@ I could not find a way to make a theme to be consistent between app and plot. I 
 :::
 
 
+## Under the hood
+
+Let us first define CSS class in file:
+
+```{.css filename='css/my-style.css'}
+.my-class {
+    font-size: 3rem;
+    background-color: pink;
+    font-weight: bold
+  }
+```
+
+Then, let us write HTML with the CSS and add to the UI by using `ui.HTML()`.
+
+```{.python filename='examples/action-layout/html-css/app.py'}
+from shiny import App, ui
+
+app_ui = ui.page_fluid(
+    ui.include_css("css/my-style.css"),
+    ui.HTML(r"""
+        <h1>This is a heading</h1>
+        <p class="my-class">This is some text!</p>
+        <ul>
+            <li>First bullet</li>
+            <li>Second bullet</li>
+        </ul>        
+        """)
+)
+
+app = App(app_ui, None)
+```
+
+::: {.callout-note}
+`ui.include_css()` is used to add CSS files. 
+:::
+
+
+You can use the HTML helper that Shiny provides.
+
+```{.python filename='examples/action-layout/html-helper/app.py'}
+from shiny import App, ui
+
+app_ui = ui.page_fluid(
+    ui.include_css("css/my-style.css"),
+    ui.h1("This is heading"),
+    ui.p("This is some text", class_="my-class"),
+    ui.tags.ul(
+        ui.tags.li("First bullet"),
+        ui.tags.li("Second bullet"),
+    ),
+)
+
+app = App(app_ui, None)
+```
+
+::: {.callout-important}
+When applying a CSS class, note that the parameter name `class_` includes underscore `_`. Parameter name without underscore will throw an error.
+:::
+
+::: {.callout-note}
+For the most important elements tag functions `h1()` and `p()`, Shiny's `ui` module provides a top level functions. Others can be asccessed via `tags` submodule.
+:::
+
+
+An example of interweaving Shiny component into a custom structure.
+
+```{.python filename='examples/action-layout/html-shiny-component/app.py'}
+from shiny import App, ui, render
+
+app_ui = ui.page_fluid(
+    ui.p(
+        "You made ",
+        ui.tags.b("$", ui.output_text("amount", inline=True)),
+        " in the last ",
+        ui.output_text("days", inline=True),
+        " days ",
+    ),
+)
+
+def server(input, output, session):
+    @render.text
+    def amount():
+        return 249
+    
+    @render.text
+    def days():
+        return 7
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+Call `ui.output_text()` with `inline=True` to display the output text inline with other elements.
+:::
