@@ -293,7 +293,7 @@ app = App(app_ui, None)
 
 ### Shiny themes
 
-Use `{shinyswatch}` package: https://github.com/posit-dev/py-shinyswatch
+Use [`{shinyswatch}` package](https://github.com/posit-dev/py-shinyswatch)
 
 ```{.python filename='examples/action-layout/shiny-theme/app.py'}
 from shiny import App, ui
