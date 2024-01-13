@@ -1,0 +1,164 @@
+# Graphics
+
+## Interactivity
+
+### Basics
+
+To handle events on plot, pass boolean arguments for `click`, `dblclick`, `hover`, and `brush`. Their values will be accessed via combination of output plot ID and event type.
+
+- `click`: the value will be accessed via `input.{id}_click()`, where `{id}` is replaced with ID of the plot. The input value will be a dictionary with `x` and `y` elements indicating the mouse position.
+- `dblclick`: the value will be accessed via `input.{id}_dblclick()`, where `{id}` is replaced with ID of the plot. The input value will be a dictionary with `x` and `y` elements indicating the mouse position.
+- `hover`: the value will be accessed via `input.{id}_hover()`, where `{id}` is replaced with ID of the plot. The input value will be a dictionary with `x` and `y` elements indicating the mouse position.
+- `brush`: the value will be accessed via `input.{id}_brush()`, where `{id}` is replaced with ID of the plot. The value will be a dictionary with `xmin`, `xmax`, `ymin`, and `ymax` elements indicating the brush area.
+
+```{.python filename='examples/action-graphics/plot-click/app.py'}
+from shiny import App, render, ui, req
+from matplotlib import pyplot as plt
+from pydataset import data
+
+mtcars = data("mtcars")
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", click=True),
+    ui.output_text_verbatim("info"),
+)
+
+def server(input, output, session):
+    @render.plot
+    def plot():
+        res = plt.scatter(mtcars['wt'], mtcars['mpg'])
+        return res
+    
+    @render.text
+    def info():
+        req(input.plot_click())
+        x = round(input.plot_click()['x'], 2)
+        y = round(input.plot_click()['y'], 2)
+        return f"[{x}, {y}]"
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+`req()` is used to make sure that the app does not do anything before the first click. This will be more discussed in later chapters.
+:::
+
+
+::: {.callout-warning}
+It did not work well with plot created by using `{plotnine}` package; the mouse position in input value did not align with actual event. For example, a snapshot below shows that I dragged a region for `[2, 3]` on x-axis and `[20, 30]` on y-axis, but the input values were read as `[1.7, 2.9]` for x-axis and `[21.9, 30.6]` for y-axis.
+
+![Input value for {plotline} plots does not align with actual user input on app.](images/action-graphics/plotnine-brush-position.png)
+:::
+
+
+### Clicking
+
+
+Prints data points near the click.
+
+```{.python filename='examples/action-graphics/near-points/app.py'}
+from shiny import App, render, ui, req
+from matplotlib import pyplot as plt
+from pydataset import data
+import numpy as np
+from sklearn.metrics import pairwise_distances
+
+mtcars = data("mtcars")
+
+# near_points(mtcars, {'x': 3.5, 'y': 15}, 'wt', 'mpg')
+def near_points(df, position, xvar, yvar, threshold=20):
+    points = df[[xvar, yvar]].copy().to_numpy()
+    click = np.array([[position['x'], position['y']]])
+
+    # Convert data into different scale
+    # For now, put some logic
+    # TO DO: revise with correct formula to convert it to pixel scale
+    min_xvar = min([position['domain']['left'], position['domain']['right']])
+    max_xvar = max([position['domain']['left'], position['domain']['right']])
+    min_yvar = min([position['domain']['bottom'], position['domain']['top']])
+    max_yvar = max([position['domain']['bottom'], position['domain']['top']])
+
+    range_x = position['range']['right'] - position['range']['left']
+    range_y = position['range']['top'] - position['range']['bottom']
+
+    points[:,0] = position['range']['left'] + (points[:,0] - min_xvar) / (max_xvar - min_xvar) * range_x
+    click[:,0] = position['range']['left'] + (click[:,0] - min_xvar) / (max_xvar - min_xvar) * range_x
+    points[:,1] = position['range']['bottom'] + (points[:,1] - min_yvar) / (max_yvar - min_yvar) * range_y
+    click[:,1] = position['range']['bottom'] + (click[:,1] - min_yvar) / (max_yvar - min_yvar) * range_y
+    
+    # Find points within threshold
+    # For now, just list in a sequence of appearance in data
+    # TO DO: sort by distance from closest to farthest
+    near = pairwise_distances(points, click) < threshold
+    return df[near]
+
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", click=True),
+    ui.output_table("data"),
+)
+
+def server(input, output, session):
+    @render.plot
+    def plot():
+        res = plt.scatter(mtcars['wt'], mtcars['mpg'])
+        return res
+    
+    @render.table
+    def data():
+        req(input.plot_click())
+        return near_points(mtcars, input.plot_click(), xvar='wt', yvar='mpg')
+
+app = App(app_ui, server)
+```
+
+::: {.callout-caution}
+I could not find a function in Shiny for Python that is corresponding to `nearPoints()` in Shiny for R, so I implemented my own function `near_points()`. It does not behave exactly same to the R function, and I hope to find a better implementation.
+:::
+
+::: {.callout-warning}
+In my experiment, the table frequently disappears immediately after appearing on a screen, and I do not know the exact reason.
+:::
+
+
+### Brushing
+
+```{.python filename='examples/action-graphics/brushing/app.py'}
+from shiny import App, render, ui, req
+from matplotlib import pyplot as plt
+from pydataset import data
+
+mtcars = data("mtcars")
+
+# brushed_points(mtcars, {'xmin': 2, 'xmax': 3, 'ymin': 20, 'ymax': 30}, 'wt', 'mpg')
+def brushed_points(df, position, xvar, yvar):
+    in_region = ((df[xvar] > position['xmin']) 
+                 & (df[xvar] < position['xmax'])
+                 & (df[yvar] > position['ymin'])
+                 & (df[yvar] < position['ymax']))
+    
+    return df[in_region]
+
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", brush=True),
+    ui.output_table("data"),
+)
+
+def server(input, output, session):
+    @render.plot
+    def plot():
+        res = plt.scatter(mtcars['wt'], mtcars['mpg'])
+        return res
+    
+    @render.table
+    def data():
+        req(input.plot_brush())
+        return brushed_points(mtcars, input.plot_brush(), xvar='wt', yvar='mpg')
+
+app = App(app_ui, server)
+```
+
+::: {.callout-caution}
+I could not find a function in Shiny for Python that is corresponding to `brushedPoints()` in Shiny for R, so I implemented my own function `brushed_points()`.
+:::
