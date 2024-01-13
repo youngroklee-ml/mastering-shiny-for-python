@@ -17,6 +17,7 @@ book:
       chapters:
       - action-workflow.qmd
       - action-layout.qmd
+      - action-graphics.qmd
   repo-url: https://github.com/youngroklee-ml/mastering-shiny-for-python
   repo-actions: [edit, issue]
 
