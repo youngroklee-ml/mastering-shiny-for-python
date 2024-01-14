@@ -162,3 +162,113 @@ app = App(app_ui, server)
 ::: {.callout-caution}
 I could not find a function in Shiny for Python that is corresponding to `brushedPoints()` in Shiny for R, so I implemented my own function `brushed_points()`.
 :::
+
+
+### Modifying the plot
+
+Resizing point size in a scatter plot
+
+
+```{.python filename='examples/action-graphics/resizing/app.py'}
+from shiny import App, ui, render, reactive
+import pandas as pd
+import numpy as np
+from sklearn.metrics import pairwise_distances
+from matplotlib import pyplot as plt
+
+np.random.seed(1014)
+df = pd.DataFrame({
+    'x': np.random.normal(size=100),
+    'y': np.random.normal(size=100)
+})
+
+def compute_distance(df, position, xvar, yvar):
+    points = df[[xvar, yvar]].copy().to_numpy()
+    click = np.array([[position['x'], position['y']]])
+
+    # Compute distance
+    dist = pairwise_distances(points, click)
+
+    return dist
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", click=True),
+)
+
+def server(input, output, session):
+    dist = reactive.value([1 for _ in range(df.shape[0])])
+
+    @reactive.effect
+    @reactive.event(input.plot_click)
+    def _():
+        dist.set(compute_distance(df, input.plot_click(), xvar='x', yvar='y'))
+    
+    @render.plot
+    def plot():
+        size = np.minimum(np.power(dist.get(), 5), 300)
+        res = plt.scatter(df['x'], df['y'], s=size)
+        return res
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+R example in Mastering Shiny book used R function `nearPoints()`, which is a built-in function in `{shiny}` R package, to compute distance between mouse click position and every each point in the plot in pixel scale. Because Shiny for Python does not have equivalent built-in function, I revised an example to compute the distance in original data scale and use a derived value from the distance as a size of each point.
+:::
+
+
+Changing point color
+
+```{.python}
+from shiny import App, render, ui, reactive
+from matplotlib import pyplot as plt
+from pydataset import data
+import pandas as pd
+
+mtcars = data("mtcars")
+
+# brushed_points(mtcars, {'xmin': 2, 'xmax': 3, 'ymin': 20, 'ymax': 30}, 'wt', 'mpg')
+def brushed_points(df, position, xvar, yvar):
+    in_region = ((df[xvar] > position['xmin']) 
+                 & (df[xvar] < position['xmax'])
+                 & (df[yvar] > position['ymin'])
+                 & (df[yvar] < position['ymax']))
+    
+    return df[in_region], in_region
+
+
+app_ui = ui.page_fluid(
+    ui.output_plot("plot", brush=True, dblclick=True),
+)
+
+def server(input, output, session):
+    selected = reactive.value([False for _ in range(mtcars.shape[0])])
+
+    @reactive.effect
+    @reactive.event(input.plot_brush)
+    def _():
+        _, brushed = brushed_points(mtcars, input.plot_brush(), xvar='wt', yvar='mpg')
+        selected.set(brushed | selected.get())
+    
+    @reactive.effect
+    @reactive.event(input.plot_dblclick)
+    def _():
+        selected.set([False for _ in range(mtcars.shape[0])])
+
+    @render.plot
+    def plot():
+        color = pd.Categorical(selected(), categories=[True, False])
+        fig, ax = plt.subplots()
+        res = ax.scatter(mtcars['wt'], mtcars['mpg'], c=color, label=color)
+        # produce a legend with the unique colors from the scatter
+        legend1 = ax.legend(*res.legend_elements(), loc="lower left", title="Classes")
+        ax.add_artist(legend1)        
+        return res
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+I slightly modified `brushed_points()` function that I used in a previous brushing examples, to return not only data points but also binary indicator whether each row in original data was selected or not in a current brushing event.
+:::
+
