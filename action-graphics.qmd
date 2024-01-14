@@ -272,3 +272,49 @@ app = App(app_ui, server)
 I slightly modified `brushed_points()` function that I used in a previous brushing examples, to return not only data points but also binary indicator whether each row in original data was selected or not in a current brushing event.
 :::
 
+
+## Dynamic height and width
+
+Dynamically resizing plot size: height and width.
+
+I could not exactly reproduce an example that exists in Mastering Shiny book for R. Let me show my code first, and let me explain more details.
+
+```{.python filename='examples/action-graphics/dynamic-height-width/app.py'}
+from shiny import App, ui, render, reactive
+import matplotlib.pyplot as plt
+from numpy.random import normal
+
+app_ui = ui.page_fluid(
+    ui.input_slider("height", "height", min=100, max=500, value=250),
+    ui.input_slider("width", "width", min=100, max=500, value=250),
+    ui.output_ui("plot_container"),
+)
+
+def server(input, output, session):
+    @render.plot
+    def plot():
+        return plt.scatter(normal(size=20), normal(size=20))
+
+    @render.ui
+    def plot_container():
+        return ui.output_plot("plot", 
+                              height=f"{input.height()}px", 
+                              width=f"{input.width()}px")
+
+app = App(app_ui, server)
+```
+
+I followed an approach that was proposed by [Vincent Nijs](https://github.com/posit-dev/py-shiny/issues/504#issuecomment-1635431164). It uses dynamic UI, `ui.output_ui()` and `render.ui()`, which will be discussed in later chapters.
+
+The noticable difference between this app and R app presented in Mastering Shiny book is that, this app will keep refreshing the plot and regenerate the data when changing a plot size, while the original R app that uses `width` and `height` arguments in `renderPlot()` does not regenerate the data and only changes the plot's appearance.
+
+::: {.callout-warning}
+This app will keep refreshing the plot and regenerate the data when changing a plot size.
+:::
+
+::: {.callout-important}
+`@render.plot(width=input.width(), height=input.height())` returns an error message `"_send_error_response: No current reactive context"`.
+`@render.plot(width=input.width, height=input.height)` returns an error message `"TypeError: unsupported operand type(s) for /: 'Value' and 'float'"`. See relevant issue [here](https://github.com/posit-dev/py-shiny/issues/504).
+:::
+
+
