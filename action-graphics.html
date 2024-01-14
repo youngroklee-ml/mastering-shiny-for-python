@@ -215,6 +215,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#brushing" id="toc-brushing" class="nav-link" data-scroll-target="#brushing">Brushing</a></li>
   <li><a href="#modifying-the-plot" id="toc-modifying-the-plot" class="nav-link" data-scroll-target="#modifying-the-plot">Modifying the plot</a></li>
   </ul></li>
+  <li><a href="#dynamic-height-and-width" id="toc-dynamic-height-and-width" class="nav-link" data-scroll-target="#dynamic-height-and-width">Dynamic height and width</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-graphics.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -575,9 +576,69 @@ Note
 <p>I slightly modified <code>brushed_points()</code> function that I used in a previous brushing examples, to return not only data points but also binary indicator whether each row in original data was selected or not in a current brushing event.</p>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="dynamic-height-and-width" class="level2">
+<h2 class="anchored" data-anchor-id="dynamic-height-and-width">Dynamic height and width</h2>
+<p>Dynamically resizing plot size: height and width.</p>
+<p>I could not exactly reproduce an example that exists in Mastering Shiny book for R. Let me show my code first, and let me explain more details.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>examples/action-graphics/dynamic-height-width/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render, reactive</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> numpy.random <span class="im">import</span> normal</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    ui.input_slider(<span class="st">"height"</span>, <span class="st">"height"</span>, <span class="bu">min</span><span class="op">=</span><span class="dv">100</span>, <span class="bu">max</span><span class="op">=</span><span class="dv">500</span>, value<span class="op">=</span><span class="dv">250</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    ui.input_slider(<span class="st">"width"</span>, <span class="st">"width"</span>, <span class="bu">min</span><span class="op">=</span><span class="dv">100</span>, <span class="bu">max</span><span class="op">=</span><span class="dv">500</span>, value<span class="op">=</span><span class="dv">250</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    ui.output_ui(<span class="st">"plot_container"</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.plot</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot():</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> plt.scatter(normal(size<span class="op">=</span><span class="dv">20</span>), normal(size<span class="op">=</span><span class="dv">20</span>))</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.ui</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> plot_container():</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> ui.output_plot(<span class="st">"plot"</span>, </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>                              height<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span><span class="bu">input</span><span class="sc">.</span>height()<span class="sc">}</span><span class="ss">px"</span>, </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>                              width<span class="op">=</span><span class="ss">f"</span><span class="sc">{</span><span class="bu">input</span><span class="sc">.</span>width()<span class="sc">}</span><span class="ss">px"</span>)</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I followed an approach that was proposed by <a href="https://github.com/posit-dev/py-shiny/issues/504#issuecomment-1635431164">Vincent Nijs</a>. It uses dynamic UI, <code>ui.output_ui()</code> and <code>render.ui()</code>, which will be discussed in later chapters.</p>
+<p>The noticable difference between this app and R app presented in Mastering Shiny book is that, this app will keep refreshing the plot and regenerate the data when changing a plot size, while the original R app that uses <code>width</code> and <code>height</code> arguments in <code>renderPlot()</code> does not regenerate the data and only changes the plot’s appearance.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This app will keep refreshing the plot and regenerate the data when changing a plot size.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><code>@render.plot(width=input.width(), height=input.height())</code> returns an error message <code>"_send_error_response: No current reactive context"</code>. <code>@render.plot(width=input.width, height=input.height)</code> returns an error message <code>"TypeError: unsupported operand type(s) for /: 'Value' and 'float'"</code>. See relevant issue <a href="https://github.com/posit-dev/py-shiny/issues/504">here</a>.</p>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->
