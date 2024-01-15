@@ -35,3 +35,10 @@ app = App(app_ui, server)
 Depending on `{shiny_validate}` version, it may reinstall `{shiny}` with different version. Please choose a right version that is compatible with your shiny installation or consider `pip install --no-deps` when installing `{shiny_validate}`.
 :::
 
+::: {.callout-tip}
+When there are mutliple controls and/or multiple rules, you can use `iv.is_valid()` to check whether all the input validation rules currently pass. 
+:::
+
+
+### Cancelling execution with `req()`
+
