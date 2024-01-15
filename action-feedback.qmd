@@ -1,0 +1,37 @@
+# User Feedback
+
+## Validation
+
+### Validating input
+
+This requires a pacakge [shiny_validate](https://github.com/gshotwell/py-shiny-validate), which is a python implementation of R package [shinyvalidate](https://rstudio.github.io/shinyvalidate/).
+
+
+```{.python filename='action-feedback/input-validation/app.py'}
+from shiny import App, ui, render, reactive, req
+from shiny_validate import InputValidator
+
+app_ui = ui.page_fluid(
+    ui.input_numeric("n", "n", value=10),
+    ui.output_text("half"),
+)
+
+def server(input, output, session):
+    iv = InputValidator()
+
+    iv.add_rule("n", lambda x: "Please select an even number" if x%2 != 0 else None)
+    iv.enable()
+
+    @render.text
+    def half():
+        even = input.n()%2 == 0
+        req(even)
+        return input.n()/2
+
+app = App(app_ui, server)
+```
+
+::: {.callout-caution}
+Depending on `{shiny_validate}` version, it may reinstall `{shiny}` with different version. Please choose a right version that is compatible with your shiny installation or consider `pip install --no-deps` when installing `{shiny_validate}`.
+:::
+
