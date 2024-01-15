@@ -216,6 +216,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#modifying-the-plot" id="toc-modifying-the-plot" class="nav-link" data-scroll-target="#modifying-the-plot">Modifying the plot</a></li>
   </ul></li>
   <li><a href="#dynamic-height-and-width" id="toc-dynamic-height-and-width" class="nav-link" data-scroll-target="#dynamic-height-and-width">Dynamic height and width</a></li>
+  <li><a href="#images" id="toc-images" class="nav-link" data-scroll-target="#images">Images</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-graphics.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -635,6 +636,68 @@ Important
 </div>
 <div class="callout-body-container callout-body">
 <p><code>@render.plot(width=input.width(), height=input.height())</code> returns an error message <code>"_send_error_response: No current reactive context"</code>. <code>@render.plot(width=input.width, height=input.height)</code> returns an error message <code>"TypeError: unsupported operand type(s) for /: 'Value' and 'float'"</code>. See relevant issue <a href="https://github.com/posit-dev/py-shiny/issues/504">here</a>.</p>
+</div>
+</div>
+</section>
+<section id="images" class="level2">
+<h2 class="anchored" data-anchor-id="images">Images</h2>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>examples/action-graphics/puppy/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny.types <span class="im">import</span> ImgData</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>puppies <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'breed'</span>: [<span class="st">"corgi"</span>, <span class="st">"labrador"</span>, <span class="st">"spaniel"</span>],</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'id'</span>: [<span class="st">"eoqnr8ikwFE"</span>, <span class="st">"KCdYn0xu2fU"</span>, <span class="st">"TzjMd7i5WQI"</span>],</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">'author'</span>: [<span class="st">"alvannee"</span>, <span class="st">"shaneguymon"</span>, <span class="st">"_redo_"</span>],</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    ui.input_select(<span class="st">"id"</span>, <span class="st">"Pick a breed"</span>, </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>                    choices<span class="op">=</span><span class="bu">dict</span>(<span class="bu">zip</span>(puppies[<span class="st">'id'</span>], puppies[<span class="st">'breed'</span>]))),</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    ui.output_ui(<span class="st">"source"</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    ui.output_image(<span class="st">"photo"</span>),</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.image</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> photo():</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>        img: ImgData <span class="op">=</span> {<span class="st">"src"</span>: <span class="ss">f"puppy-photos/</span><span class="sc">{</span><span class="bu">input</span><span class="sc">.</span><span class="bu">id</span>()<span class="sc">}</span><span class="ss">.jpg"</span>, </span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"width"</span>: <span class="st">"500px"</span>, <span class="st">"height"</span>: <span class="st">"650px"</span>}</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> img</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.ui</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> source():</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>        info <span class="op">=</span> puppies[puppies[<span class="st">'id'</span>] <span class="op">==</span> <span class="bu">input</span>.<span class="bu">id</span>()]</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> ui.HTML(<span class="ss">f"""&lt;p&gt;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;a href='https://unsplash.com/photos/</span><span class="sc">{</span>info[<span class="st">'id'</span>]<span class="sc">.</span>squeeze()<span class="sc">}</span><span class="ss">'&gt;original&lt;/a&gt; by</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;a href='https://unsplash.com/@</span><span class="sc">{</span>info[<span class="st">'author'</span>]<span class="sc">.</span>squeeze()<span class="sc">}</span><span class="ss">'&gt;</span><span class="sc">{</span>info[<span class="st">'author'</span>]<span class="sc">.</span>squeeze()<span class="sc">}</span><span class="ss">&lt;/a&gt;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="ss">            &lt;/p&gt;"""</span>)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="{callout-note}">
+<p><code>ImgData</code> has additional attributes like <code>alt</code> and <code>style</code>. See <a href="https://shiny.posit.co/py/api/MiscTypes.html#shiny.types.ImgData">here</a>.</p>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When I run the app on my interactive development environment, directory <em>puppy-photos</em> exists in a root directory of the project. It may not be an ideal configuration for deployment. <a href="https://shiny.posit.co/py/api/ui.output_image.html">An example on the Shiny for Python website</a> set a directory of image path to be relative to a directory that <em>app.py</em> file exists.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pathlib <span class="im">import</span> Path</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="bu">dir</span> <span class="op">=</span> Path(<span class="va">__file__</span>).resolve().parent</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 
