@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Youngrok Lee">
-<meta name="dcterms.date" content="2024-01-15">
 
-<title>Mastering Shiny Examples and Solutions for Python</title>
+<title>Mastering Shiny Examples and Solutions for Python - User Feedback</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./basic-app.html" rel="next">
+<link href="./action-graphics.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -109,7 +107,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./action-workflow.html">Shiny in Action</a></li><li class="breadcrumb-item"><a href="./action-feedback.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">User Feedback</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -139,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -200,7 +198,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./action-feedback.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">User Feedback</span></a>
+  <a href="./action-feedback.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">User Feedback</span></a>
   </div>
 </li>
       </ul>
@@ -215,46 +213,27 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
+  <li><a href="#validation" id="toc-validation" class="nav-link active" data-scroll-target="#validation">Validation</a>
   <ul class="collapse">
-  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a>
-  <ul class="collapse">
-  <li><a href="#python-version" id="toc-python-version" class="nav-link" data-scroll-target="#python-version">Python version</a></li>
-  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
-  </ul></li>
-  <li><a href="#ide" id="toc-ide" class="nav-link" data-scroll-target="#ide">IDE</a>
-  <ul class="collapse">
-  <li><a href="#vs-code-extensions" id="toc-vs-code-extensions" class="nav-link" data-scroll-target="#vs-code-extensions">VS Code extensions</a></li>
-  </ul></li>
+  <li><a href="#validating-input" id="toc-validating-input" class="nav-link" data-scroll-target="#validating-input">Validating input</a></li>
+  <li><a href="#cancelling-execution-with-req" id="toc-cancelling-execution-with-req" class="nav-link" data-scroll-target="#cancelling-execution-with-req">Cancelling execution with <code>req()</code></a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-feedback.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Mastering Shiny Examples and Solutions for Python</h1>
+<h1 class="title"><span class="chapter-title">User Feedback</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Youngrok Lee </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">January 15, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -262,191 +241,68 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This book is to reproduce Hadley Wickham’s <a href="https://mastering-shiny.org">Mastering Shiny</a> examples and exerciese solutions in Python.</p>
-<p>The followings are reference materials:</p>
-<ul>
-<li><a href="https://mastering-shiny.org">Mastering Shiny</a> by Hadley Wickham</li>
-<li><a href="https://shiny.posit.co/py/docs/overview.html">Learn Shiny</a> by Posit Inc.&nbsp;on Shiny for Python website</li>
-<li><a href="https://gist.github.com/wch/616934a6fe57636434154c112ac8a718">Shiny R to Python translation guide</a> by Winston Chang</li>
-<li><a href="https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md">Change Log for Shiny for Python</a></li>
-</ul>
-<p>Computation environment is as follows:</p>
-<section id="python" class="level2">
-<h2 class="anchored" data-anchor-id="python">Python</h2>
-<section id="python-version" class="level3">
-<h3 class="anchored" data-anchor-id="python-version">Python version</h3>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>python <span class="op">--</span>version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Python 3.11.2</code></pre>
+<section id="validation" class="level2">
+<h2 class="anchored" data-anchor-id="validation">Validation</h2>
+<section id="validating-input" class="level3">
+<h3 class="anchored" data-anchor-id="validating-input">Validating input</h3>
+<p>This requires a pacakge <a href="https://github.com/gshotwell/py-shiny-validate">shiny_validate</a>, which is a python implementation of R package <a href="https://rstudio.github.io/shinyvalidate/">shinyvalidate</a>.</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>action-feedback/input-validation/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render, reactive, req</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny_validate <span class="im">import</span> InputValidator</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ui.input_numeric(<span class="st">"n"</span>, <span class="st">"n"</span>, value<span class="op">=</span><span class="dv">10</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    ui.output_text(<span class="st">"half"</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    iv <span class="op">=</span> InputValidator()</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    iv.add_rule(<span class="st">"n"</span>, <span class="kw">lambda</span> x: <span class="st">"Please select an even number"</span> <span class="cf">if</span> x<span class="op">%</span><span class="dv">2</span> <span class="op">!=</span> <span class="dv">0</span> <span class="cf">else</span> <span class="va">None</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    iv.enable()</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.text</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> half():</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>        even <span class="op">=</span> <span class="bu">input</span>.n()<span class="op">%</span><span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        req(even)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">input</span>.n()<span class="op">/</span><span class="dv">2</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Depending on <code>{shiny_validate}</code> version, it may reinstall <code>{shiny}</code> with different version. Please choose a right version that is compatible with your shiny installation or consider <code>pip install --no-deps</code> when installing <code>{shiny_validate}</code>.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When there are mutliple controls and/or multiple rules, you can use <code>iv.is_valid()</code> to check whether all the input validation rules currently pass.</p>
 </div>
 </div>
 </section>
-<section id="packages" class="level3">
-<h3 class="anchored" data-anchor-id="packages">Packages</h3>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'requirements.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>anyio==4.2.0
-appdirs==1.4.4
-appnope==0.1.3
-argon2-cffi==23.1.0
-argon2-cffi-bindings==21.2.0
-arrow==1.3.0
-asgiref==3.7.2
-asttokens==2.4.1
-async-lru==2.0.4
-attrs==23.1.0
-Babel==2.14.0
-beautifulsoup4==4.12.2
-bleach==6.1.0
-bqplot==0.12.42
-certifi==2023.11.17
-cffi==1.16.0
-charset-normalizer==3.3.2
-click==8.1.7
-comm==0.2.0
-contourpy==1.2.0
-cycler==0.12.1
-debugpy==1.8.0
-decorator==5.1.1
-defusedxml==0.7.1
-executing==2.0.1
-faicons==0.2.1
-fastjsonschema==2.19.1
-fonttools==4.47.0
-fqdn==1.5.1
-gast==0.4.0
-h11==0.14.0
-htmltools==0.5.1
-idna==3.6
-ipydatagrid==1.2.0
-ipykernel==6.28.0
-ipython==8.18.0
-ipywidgets==8.1.1
-isoduration==20.11.0
-jedi==0.19.1
-Jinja2==3.1.2
-joblib==1.3.2
-json5==0.9.14
-jsonpointer==2.4
-jsonschema==4.20.0
-jsonschema-specifications==2023.12.1
-jupyter==1.0.0
-jupyter-console==6.6.3
-jupyter-events==0.9.0
-jupyter-lsp==2.2.1
-jupyter_client==8.6.0
-jupyter_core==5.5.1
-jupyter_server==2.12.1
-jupyter_server_terminals==0.5.1
-jupyterlab==4.0.10
-jupyterlab-widgets==3.0.9
-jupyterlab_pygments==0.3.0
-jupyterlab_server==2.25.2
-kiwisolver==1.4.5
-linkify-it-py==2.0.2
-markdown-it-py==3.0.0
-MarkupSafe==2.1.3
-matplotlib==3.8.2
-matplotlib-inline==0.1.6
-mdit-py-plugins==0.4.0
-mdurl==0.1.2
-mistune==3.0.2
-mizani==0.9.3
-nbclient==0.9.0
-nbconvert==7.13.1
-nbformat==5.9.2
-nest-asyncio==1.5.8
-notebook==7.0.6
-notebook_shim==0.2.3
-numpy==1.26.2
-overrides==7.4.0
-packaging==23.2
-pandas==2.1.4
-pandocfilters==1.5.0
-parso==0.8.3
-patsy==0.5.5
-pexpect==4.9.0
-Pillow==10.1.0
-platformdirs==4.1.0
-plotnine==0.12.4
-prometheus-client==0.19.0
-prompt-toolkit==3.0.36
-psutil==5.9.7
-ptyprocess==0.7.0
-pure-eval==0.2.2
-py2vega==0.6.1
-pycparser==2.21
-pydataset==0.2.0
-Pygments==2.17.2
-pyparsing==3.1.1
-python-dateutil==2.8.2
-python-json-logger==2.0.7
-python-multipart==0.0.6
-pytz==2023.3.post1
-PyYAML==6.0.1
-pyzmq==25.1.2
-qgrid==1.3.1
-qtconsole==5.5.1
-QtPy==2.4.1
-questionary==2.0.1
-referencing==0.32.0
-requests==2.31.0
-rfc3339-validator==0.1.4
-rfc3986-validator==0.1.1
-rpds-py==0.16.2
-scikit-learn==1.3.2
-scipy==1.11.4
-seaborn==0.13.0
-Send2Trash==1.8.2
-shiny==0.6.1.1
-shinyswatch==0.4.2
-shinywidgets==0.2.4
-six==1.16.0
-sniffio==1.3.0
-soupsieve==2.5
-stack-data==0.6.3
-starlette==0.34.0
-statsmodels==0.14.1
-terminado==0.18.0
-threadpoolctl==3.2.0
-tinycss2==1.2.1
-tornado==6.4
-traitlets==5.14.0
-traittypes==0.2.1
-types-python-dateutil==2.8.19.14
-typing_extensions==4.9.0
-tzdata==2023.4
-uc-micro-py==1.0.2
-uri-template==1.3.0
-urllib3==2.1.0
-uvicorn==0.25.0
-watchfiles==0.21.0
-wcwidth==0.2.12
-webcolors==1.13
-webencodings==0.5.1
-websocket-client==1.7.0
-websockets==12.0
-widgetsnbextension==4.0.9
-</code></pre>
-</div>
-</div>
-</section>
-</section>
-<section id="ide" class="level2">
-<h2 class="anchored" data-anchor-id="ide">IDE</h2>
-<section id="vs-code-extensions" class="level3">
-<h3 class="anchored" data-anchor-id="vs-code-extensions">VS Code extensions</h3>
-<ul>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=posit.shiny-python">Shiny for Python</a></li>
-</ul>
+<section id="cancelling-execution-with-req" class="level3">
+<h3 class="anchored" data-anchor-id="cancelling-execution-with-req">Cancelling execution with <code>req()</code></h3>
 
 
-</section>
 </section>
 </section>
 
@@ -686,11 +542,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./action-graphics.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Graphics</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./basic-app.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-title">Your first Shiny app</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
