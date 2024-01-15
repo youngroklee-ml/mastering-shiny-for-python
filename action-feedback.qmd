@@ -42,3 +42,155 @@ When there are mutliple controls and/or multiple rules, you can use `iv.is_valid
 
 ### Cancelling execution with `req()`
 
+```{.python filename='examples/action-feedback/cancelling-execution/app.py'}
+from shiny import App, ui, render, req
+
+app_ui = ui.page_fluid(
+    ui.input_select("language", "Language", choices=["", "English", "Maori"]),
+    ui.input_text("name", "Name"),
+    ui.output_text("greeting"),
+)
+
+def server(input, output, session):
+    greetings = {
+        'English': "Hello",
+        'Maori': "Ki ora",
+    }
+
+    @render.text
+    def greeting():
+        req(input.language(), input.name())
+        return f"{greetings[input.language()]} {input.name()}!"
+    
+
+app = App(app_ui, server)
+```
+
+### `req()` and validation
+
+Below is my attempt to implement an app that behave the same to the Mastering Shiny book example:
+
+- When no input is provided, does not raise an error and just does not show any table
+- When invalid data name is provided, show an error message, but keep a table output to be a table associated with the last valid input.
+
+```{.python filename='examples/action-feedback/dataset-name/app.py'}
+from shiny import App, ui, render, reactive, req
+from shiny_validate import InputValidator
+from pydataset import data
+import numpy as np
+
+datasets = set(data()['dataset_id'])
+
+app_ui = ui.page_fluid(
+    ui.input_text("dataset", "Dataset name"),
+    ui.output_table("table"),
+)
+
+def server(input, output, session):
+    iv = InputValidator()
+    iv.add_rule("dataset", 
+        lambda x: "Unknown dataset" \
+            if len(x) > 0 and not x in datasets \
+            else None)
+    iv.enable()
+
+    @reactive.calc
+    def load():
+        req(input.dataset())
+        req(iv.is_valid(), cancel_output=True)
+        return data(input.dataset())
+    
+    @render.table
+    def table():
+        return load().head()
+
+app = App(app_ui, server)
+```
+
+Below is slightly different implementation by using `check` submodule of `{shiny_validate}`.
+
+```{.python filename='examples/action-feedback/dataset-name/app-check.py'}
+from shiny import App, ui, render, reactive, req
+from shiny_validate import InputValidator, check
+from pydataset import data
+import numpy as np
+
+datasets = set(data()['dataset_id'])
+
+app_ui = ui.page_fluid(
+    ui.input_text("dataset", "Dataset name"),
+    ui.output_table("table"),
+)
+
+def server(input, output, session):
+    iv = InputValidator()
+    iv.add_rule("dataset", 
+                check.compose_rules(
+                    check.required("Empty dataset name"),
+                    check.in_set(datasets, "Unknown dataset")),
+                )
+                
+    iv.enable()
+
+    @reactive.calc
+    def load():
+        req(input.dataset())
+        req(iv.is_valid(), cancel_output=True)
+        return data(input.dataset())
+    
+    @render.table
+    def table():
+        return load().head()
+
+app = App(app_ui, server)
+```
+
+- `check.required()` is to set the input as required and throw an error message when input has not been provided.
+- `check.in_set()` is to check whether the input is an element of given `set`. It is important that the type of `set` argument should be `set`.
+- `check.compose_rules()` is to add multiple rules to a single input control.
+
+
+### Validate output
+
+I could not find Shiny for Python's equivalent of Shiny for R's `validate()` function. Implementation below is per Gorden Shotwell's recommendation on [this thread](https://community.rstudio.com/t/validate-user-input-shiny-for-python/160272).
+
+
+```{.python filename='examples/action-feedback/output-validation/app.py'}
+from shiny import App, ui, render, reactive, req
+import numpy as np
+
+app_ui = ui.page_fluid(
+    ui.input_numeric("x", "x", value=0),
+    ui.input_select("trans", "transformation", choices=["square", "log", "square-root"]),
+    ui.output_ui("out_container"),
+)
+
+def server(input, output, session):
+    @render.ui
+    def out_container():
+        if input.x() < 0 and input.trans() in ["log", "square-root"]:
+            return ui.markdown("**x can not be negative for this transformation**")
+        else:
+            return ui.output_text("out")
+    
+    @render.text
+    def out():
+        req(not (input.x() < 0 and input.trans() in ["log", "square-root"]))
+        match input.trans():
+            case "square":
+                res = input.x()**2
+            case "square-root":
+                res = np.sqrt(input.x())
+            case "log":
+                res = np.log(input.x())
+
+        return res
+
+app = App(app_ui, server)
+```
+
+::: {.callout-warning}
+I could not find Shiny for Python's equivalent of Shiny for R's `validate()` function. Implementation below is per Gorden Shotwell's recommendation on [this thread](https://community.rstudio.com/t/validate-user-input-shiny-for-python/160272). I hope Shiny for Python provides `validate()` equvalent.
+:::
+
+
