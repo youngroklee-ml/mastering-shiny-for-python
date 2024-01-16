@@ -194,3 +194,147 @@ I could not find Shiny for Python's equivalent of Shiny for R's `validate()` fun
 :::
 
 
+
+## Notifications
+
+### Transient notification
+
+`ui.notification_show()` displays a message in the corner of the screen. 
+
+```{.python filename='examples/action-feedback/transient-notification/app.py'}
+from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
+from time import sleep
+
+app_ui = ui.page_fluid(
+    ui.input_action_button("goodnight", "Good night"),
+)
+
+def server(input: Inputs, output: Outputs, session: Session):
+    @reactive.effect
+    @reactive.event(input.goodnight)
+    def _():
+        ui.notification_show("So long")
+        sleep(1)        
+        ui.notification_show("Farewell", type="message")
+        sleep(1)        
+        ui.notification_show("Auf Wiedersehen", type="warning")
+        sleep(1)        
+        ui.notification_show("Adieu", type="error")
+
+app = App(app_ui, server)
+```
+
+::: {.callout-note}
+Shiny for Python website shows an [example with asynchronous programming](https://shiny.posit.co/py/docs/ui-feedback.html). I do not clearly understand what would be differences, but here is an asynchronous programming version implementation:
+
+```{.python filename='examples/action-feedback/transient-notification/app-async.py'} 
+from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
+from asyncio import sleep
+
+app_ui = ui.page_fluid(
+    ui.input_action_button("goodnight", "Good night"),
+)
+
+def server(input: Inputs, output: Outputs, session: Session):
+    @reactive.effect
+    @reactive.event(input.goodnight)
+    async def _():
+        ui.notification_show("So long")
+        await sleep(1)
+        ui.notification_show("Farewell", type="message")
+        await sleep(1)
+        ui.notification_show("Auf Wiedersehen", type="warning")
+        await sleep(1)
+        ui.notification_show("Adieu", type="error")
+
+app = App(app_ui, server)
+```
+:::
+
+
+### Removing on completion
+
+
+```{.python filename='examples/action-feedback/removing-notification/app.py'}
+from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
+from shiny.types import FileInfo
+import pandas as pd
+
+app_ui = ui.page_fluid(
+    ui.input_file("file", "Add CSV file", accept=".csv"),
+    ui.output_table("table")
+)
+
+
+def server(input: Inputs, output: Outputs, session: Session):
+    @reactive.calc
+    def data():
+        id = ui.notification_show("Reading data...",
+            duration=None, close_button=False)
+        
+        file: list[FileInfo] | None = input.file()
+        if file is None:
+            res = pd.DataFrame()
+        else:
+            res = pd.read_csv(file[0]["datapath"])
+
+        ui.notification_remove(id)
+        
+        return res
+        
+    @render.table
+    def table():
+        return data().head()
+
+
+app = App(app_ui, server)
+```
+
+::: {.callout-warning}
+I could not find Shiny for Python's equivalent of Shiny for R's `on.exit()` function. The app implementation above may be unreliable in a case when the reactive code chunk returns an error (e.g. when `pd.read_csv()` causes an error).
+:::
+
+
+### Progressive updates
+
+
+```{.python filename='examples/action-feedback/progressive-update/app.py'}
+from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
+from pydataset import data
+from time import sleep
+
+mtcars = data('mtcars')
+
+app_ui = ui.page_fluid(
+    ui.output_table("table"),
+)
+
+
+def server(input: Inputs, output: Outputs, session: Session):
+    def notify(msg, id=None):
+        return ui.notification_show(msg, id=id, duration=None, close_button=False)
+
+    @reactive.calc
+    def data():
+        id = notify("Reading data...")
+        sleep(1)
+
+        notify("Reticulating splines...", id=id)
+        sleep(1)
+
+        notify("Herding llamas...", id=id)
+        sleep(1)
+
+        notify("Orthogonalizing matrices...", id=id)
+        sleep(1)
+
+        ui.notification_remove(id)
+        return mtcars
+
+    @render.table
+    def table():
+        return data().head()
+
+
+app = App(app_ui, server)
+```
