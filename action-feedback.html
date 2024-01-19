@@ -226,6 +226,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#removing-on-completion" id="toc-removing-on-completion" class="nav-link" data-scroll-target="#removing-on-completion">Removing on completion</a></li>
   <li><a href="#progressive-updates" id="toc-progressive-updates" class="nav-link" data-scroll-target="#progressive-updates">Progressive updates</a></li>
   </ul></li>
+  <li><a href="#progress-bars" id="toc-progress-bars" class="nav-link" data-scroll-target="#progress-bars">Progress bars</a>
+  <ul class="collapse">
+  <li><a href="#shiny" id="toc-shiny" class="nav-link" data-scroll-target="#shiny">Shiny</a></li>
+  <li><a href="#waiter" id="toc-waiter" class="nav-link" data-scroll-target="#waiter">Waiter</a></li>
+  <li><a href="#spinners" id="toc-spinners" class="nav-link" data-scroll-target="#spinners">Spinners</a></li>
+  </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-feedback.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -645,6 +651,75 @@ Warning
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+</section>
+<section id="progress-bars" class="level2">
+<h2 class="anchored" data-anchor-id="progress-bars">Progress bars</h2>
+<section id="shiny" class="level3">
+<h3 class="anchored" data-anchor-id="shiny">Shiny</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>examples/action-feedback/builtin-progress-bar/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render, reactive</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> time <span class="im">import</span> sleep</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    ui.input_numeric(<span class="st">"steps"</span>, <span class="st">"How many steps?"</span>, <span class="dv">10</span>),</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    ui.input_action_button(<span class="st">"go"</span>, <span class="st">"go"</span>),</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    ui.output_text(<span class="st">"result"</span>),</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.calc</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.event</span>(<span class="bu">input</span>.go)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> data():</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">with</span> ui.Progress() <span class="im">as</span> p:</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>            p.<span class="bu">set</span>(message<span class="op">=</span><span class="st">"Computing random number"</span>)</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">input</span>.steps()):</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>                p.inc(<span class="dv">1</span><span class="op">/</span><span class="bu">input</span>.steps())</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>                sleep(<span class="fl">0.5</span>)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> random.uniform(<span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.text</span></span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> result():</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">round</span>(data(), <span class="dv">2</span>)</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following code provides equally behaving progress bar:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> ui.Progress(<span class="bu">min</span><span class="op">=</span><span class="dv">1</span>, <span class="bu">max</span><span class="op">=</span><span class="bu">input</span>.steps()) <span class="im">as</span> p:</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    p.<span class="bu">set</span>(message<span class="op">=</span><span class="st">"Computing random number"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">input</span>.steps()):</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>            p.<span class="bu">set</span>(i)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>            sleep(<span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You can pass <code>min</code> and <code>max</code> arguments when initializing the progress bar to set the starting point and end of the progress bar. If you do not provide, they set to be <code>min=0</code> and <code>max=1</code> by default.</li>
+<li>Instead of <code>inc()</code> that increment the progress bar by <code>amount</code> argument, you can use <code>set()</code> that update progress to be <code>value</code> argument.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="waiter" class="level3">
+<h3 class="anchored" data-anchor-id="waiter">Waiter</h3>
+<p>There is a python package <a href="https://github.com/eodaGmbH/py-waiter">py-waiter</a> that provides python implementation of <a href="">waiter package from John Coene</a>. As of January 19, 2024, py-waiter only exists in github.</p>
+<p>Let me further explore this package later, probably once the package is registered to PyPI.</p>
+</section>
+<section id="spinners" class="level3">
+<h3 class="anchored" data-anchor-id="spinners">Spinners</h3>
+<p>The same situation to waiter.</p>
 
 
 </section>
