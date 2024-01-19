@@ -389,3 +389,16 @@ with ui.Progress(min=1, max=input.steps()) as p:
 - Instead of `inc()` that increment the progress bar by `amount` argument, you can use `set()` that update progress to be `value` argument.
 :::
 
+
+### Waiter
+
+There is a python package [py-waiter](https://github.com/eodaGmbH/py-waiter) that provides python implementation of [waiter package from John Coene](). As of January 19, 2024, py-waiter only exists in github.
+
+Let me further explore this package later, probably once the package is registered to PyPI.
+
+
+### Spinners
+
+The same situation to waiter.
+
+
