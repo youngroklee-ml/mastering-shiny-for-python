@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Youngrok Lee">
-<meta name="dcterms.date" content="2024-01-28">
 
-<title>Mastering Shiny Examples and Solutions for Python</title>
+<title>Mastering Shiny Examples and Solutions for Python - Unloads and downloads</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,7 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./basic-app.html" rel="next">
+<link href="./action-feedback.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -116,7 +114,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Preface</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./action-workflow.html">Shiny in Action</a></li><li class="breadcrumb-item"><a href="./action-transfer.html"><span class="chapter-title">Unloads and downloads</span></a></li></ol></nav>
         <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -146,7 +144,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Preface</span></a>
   </div>
 </li>
@@ -212,7 +210,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./action-transfer.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Unloads and downloads</span></a>
+  <a href="./action-transfer.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Unloads and downloads</span></a>
   </div>
 </li>
       </ul>
@@ -227,46 +225,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#preface" id="toc-preface" class="nav-link active" data-scroll-target="#preface">Preface</a>
+  <li><a href="#upload" id="toc-upload" class="nav-link active" data-scroll-target="#upload">Upload</a>
   <ul class="collapse">
-  <li><a href="#python" id="toc-python" class="nav-link" data-scroll-target="#python">Python</a>
-  <ul class="collapse">
-  <li><a href="#python-version" id="toc-python-version" class="nav-link" data-scroll-target="#python-version">Python version</a></li>
-  <li><a href="#packages" id="toc-packages" class="nav-link" data-scroll-target="#packages">Packages</a></li>
+  <li><a href="#server" id="toc-server" class="nav-link" data-scroll-target="#server">Server</a></li>
+  <li><a href="#uploading-data" id="toc-uploading-data" class="nav-link" data-scroll-target="#uploading-data">Uploading data</a></li>
   </ul></li>
-  <li><a href="#ide" id="toc-ide" class="nav-link" data-scroll-target="#ide">IDE</a>
+  <li><a href="#download" id="toc-download" class="nav-link" data-scroll-target="#download">Download</a>
   <ul class="collapse">
-  <li><a href="#vs-code-extensions" id="toc-vs-code-extensions" class="nav-link" data-scroll-target="#vs-code-extensions">VS Code extensions</a></li>
-  </ul></li>
+  <li><a href="#downloading-data" id="toc-downloading-data" class="nav-link" data-scroll-target="#downloading-data">Downloading data</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-transfer.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./action-workflow.html">Shiny in Action</a></li><li class="breadcrumb-item"><a href="./action-transfer.html"><span class="chapter-title">Unloads and downloads</span></a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Mastering Shiny Examples and Solutions for Python</h1>
+<h1 class="title"><span class="chapter-title">Unloads and downloads</span></h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Youngrok Lee </p>
-          </div>
-  </div>
     
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">January 28, 2024</p>
-    </div>
-  </div>
   
     
   </div>
@@ -276,191 +259,130 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="preface" class="level1 unnumbered">
-<h1 class="unnumbered">Preface</h1>
-<p>This book is to reproduce Hadley Wickham’s <a href="https://mastering-shiny.org">Mastering Shiny</a> examples and exerciese solutions in Python.</p>
-<p>The followings are reference materials:</p>
-<ul>
-<li><a href="https://mastering-shiny.org">Mastering Shiny</a> by Hadley Wickham</li>
-<li><a href="https://shiny.posit.co/py/docs/overview.html">Learn Shiny</a> by Posit Inc.&nbsp;on Shiny for Python website</li>
-<li><a href="https://gist.github.com/wch/616934a6fe57636434154c112ac8a718">Shiny R to Python translation guide</a> by Winston Chang</li>
-<li><a href="https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md">Change Log for Shiny for Python</a></li>
-</ul>
-<p>Computation environment is as follows:</p>
-<section id="python" class="level2">
-<h2 class="anchored" data-anchor-id="python">Python</h2>
-<section id="python-version" class="level3">
-<h3 class="anchored" data-anchor-id="python-version">Python version</h3>
-<div class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>python <span class="op">--</span>version</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Python 3.11.2</code></pre>
+<section id="upload" class="level2">
+<h2 class="anchored" data-anchor-id="upload">Upload</h2>
+<section id="server" class="level3">
+<h3 class="anchored" data-anchor-id="server">Server</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>action-transfer/upload-multiple/app.py</strong></pre>
 </div>
+<div class="sourceCode" id="cb1" data-filename="action-transfer/upload-multiple/app.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    ui.input_file(<span class="st">"upload"</span>, <span class="va">None</span>, button_label<span class="op">=</span><span class="st">"Upload..."</span>, multiple<span class="op">=</span><span class="va">True</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    ui.output_table(<span class="st">"files"</span>),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.table</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> files():</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> pd.DataFrame(<span class="bu">input</span>.upload())</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="packages" class="level3">
-<h3 class="anchored" data-anchor-id="packages">Packages</h3>
-<div class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'requirements.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(f.read())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>anyio==4.2.0
-appdirs==1.4.4
-appnope==0.1.3
-argon2-cffi==23.1.0
-argon2-cffi-bindings==21.2.0
-arrow==1.3.0
-asgiref==3.7.2
-asttokens==2.4.1
-async-lru==2.0.4
-attrs==23.1.0
-Babel==2.14.0
-beautifulsoup4==4.12.2
-bleach==6.1.0
-bqplot==0.12.42
-certifi==2023.11.17
-cffi==1.16.0
-charset-normalizer==3.3.2
-click==8.1.7
-comm==0.2.0
-contourpy==1.2.0
-cycler==0.12.1
-debugpy==1.8.0
-decorator==5.1.1
-defusedxml==0.7.1
-executing==2.0.1
-faicons==0.2.1
-fastjsonschema==2.19.1
-fonttools==4.47.0
-fqdn==1.5.1
-gast==0.4.0
-h11==0.14.0
-htmltools==0.5.1
-idna==3.6
-ipydatagrid==1.2.0
-ipykernel==6.28.0
-ipython==8.18.0
-ipywidgets==8.1.1
-isoduration==20.11.0
-jedi==0.19.1
-Jinja2==3.1.2
-joblib==1.3.2
-json5==0.9.14
-jsonpointer==2.4
-jsonschema==4.20.0
-jsonschema-specifications==2023.12.1
-jupyter==1.0.0
-jupyter-console==6.6.3
-jupyter-events==0.9.0
-jupyter-lsp==2.2.1
-jupyter_client==8.6.0
-jupyter_core==5.5.1
-jupyter_server==2.12.1
-jupyter_server_terminals==0.5.1
-jupyterlab==4.0.10
-jupyterlab-widgets==3.0.9
-jupyterlab_pygments==0.3.0
-jupyterlab_server==2.25.2
-kiwisolver==1.4.5
-linkify-it-py==2.0.2
-markdown-it-py==3.0.0
-MarkupSafe==2.1.3
-matplotlib==3.8.2
-matplotlib-inline==0.1.6
-mdit-py-plugins==0.4.0
-mdurl==0.1.2
-mistune==3.0.2
-mizani==0.9.3
-nbclient==0.9.0
-nbconvert==7.13.1
-nbformat==5.9.2
-nest-asyncio==1.5.8
-notebook==7.0.6
-notebook_shim==0.2.3
-numpy==1.26.2
-overrides==7.4.0
-packaging==23.2
-pandas==2.1.4
-pandocfilters==1.5.0
-parso==0.8.3
-patsy==0.5.5
-pexpect==4.9.0
-Pillow==10.1.0
-platformdirs==4.1.0
-plotnine==0.12.4
-prometheus-client==0.19.0
-prompt-toolkit==3.0.36
-psutil==5.9.7
-ptyprocess==0.7.0
-pure-eval==0.2.2
-py2vega==0.6.1
-pycparser==2.21
-pydataset==0.2.0
-Pygments==2.17.2
-pyparsing==3.1.1
-python-dateutil==2.8.2
-python-json-logger==2.0.7
-python-multipart==0.0.6
-pytz==2023.3.post1
-PyYAML==6.0.1
-pyzmq==25.1.2
-qgrid==1.3.1
-qtconsole==5.5.1
-QtPy==2.4.1
-questionary==2.0.1
-referencing==0.32.0
-requests==2.31.0
-rfc3339-validator==0.1.4
-rfc3986-validator==0.1.1
-rpds-py==0.16.2
-scikit-learn==1.3.2
-scipy==1.11.4
-seaborn==0.13.0
-Send2Trash==1.8.2
-shiny==0.6.1.1
-shinyswatch==0.4.2
-shinywidgets==0.2.4
-six==1.16.0
-sniffio==1.3.0
-soupsieve==2.5
-stack-data==0.6.3
-starlette==0.34.0
-statsmodels==0.14.1
-terminado==0.18.0
-threadpoolctl==3.2.0
-tinycss2==1.2.1
-tornado==6.4
-traitlets==5.14.0
-traittypes==0.2.1
-types-python-dateutil==2.8.19.14
-typing_extensions==4.9.0
-tzdata==2023.4
-uc-micro-py==1.0.2
-uri-template==1.3.0
-urllib3==2.1.0
-uvicorn==0.25.0
-watchfiles==0.21.0
-wcwidth==0.2.12
-webcolors==1.13
-webencodings==0.5.1
-websocket-client==1.7.0
-websockets==12.0
-widgetsnbextension==4.0.9
-</code></pre>
+<section id="uploading-data" class="level3">
+<h3 class="anchored" data-anchor-id="uploading-data">Uploading data</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>action-transfer/uploading-data/app.py</strong></pre>
 </div>
+<div class="sourceCode" id="cb2" data-filename="action-transfer/uploading-data/app.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render, reactive, req</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    ui.input_file(<span class="st">"file"</span>, <span class="va">None</span>, accept<span class="op">=</span>[<span class="st">".csv"</span>, <span class="st">".tsv"</span>]),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    ui.input_numeric(<span class="st">"n"</span>, <span class="st">"Rows"</span>, value<span class="op">=</span><span class="dv">5</span>, <span class="bu">min</span><span class="op">=</span><span class="dv">1</span>, step<span class="op">=</span><span class="dv">1</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    ui.output_ui(<span class="st">"out_container"</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.calc</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> data():</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        req(<span class="bu">input</span>.<span class="bu">file</span>())</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        _, ext <span class="op">=</span> os.path.splitext(<span class="bu">input</span>.<span class="bu">file</span>()[<span class="dv">0</span>][<span class="st">"name"</span>])</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">match</span> ext:</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">".csv"</span>:</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> pd.read_csv(<span class="bu">input</span>.<span class="bu">file</span>()[<span class="dv">0</span>][<span class="st">"datapath"</span>])</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> <span class="st">".tsv"</span>:</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> pd.read_csv(<span class="bu">input</span>.<span class="bu">file</span>()[<span class="dv">0</span>][<span class="st">"datapath"</span>], delimiter<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>)</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>            <span class="cf">case</span> _:</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.ui</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> out_container():</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(data(), pd.DataFrame):</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> ui.output_table(<span class="st">"head"</span>)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> ui.markdown(<span class="st">"**Invalid file; Please upload a .csv or .tsv file**"</span>)</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.table</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> head():</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>        req(<span class="bu">isinstance</span>(data(), pd.DataFrame))</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> data().head(<span class="bu">input</span>.n())</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>                </span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
-<section id="ide" class="level2">
-<h2 class="anchored" data-anchor-id="ide">IDE</h2>
-<section id="vs-code-extensions" class="level3">
-<h3 class="anchored" data-anchor-id="vs-code-extensions">VS Code extensions</h3>
-<ul>
-<li><a href="https://marketplace.visualstudio.com/items?itemName=posit.shiny-python">Shiny for Python</a></li>
-</ul>
+<section id="download" class="level2">
+<h2 class="anchored" data-anchor-id="download">Download</h2>
+<section id="downloading-data" class="level3">
+<h3 class="anchored" data-anchor-id="downloading-data">Downloading data</h3>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>examples/action-transfer/downloading-data/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb3" data-filename="examples/action-transfer/downloading-data/app.py"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, render, reactive, req</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pydataset <span class="im">import</span> data</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>datasets <span class="op">=</span> <span class="bu">list</span>(data()[<span class="st">"dataset_id"</span>])</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    ui.input_select(<span class="st">"dataset"</span>, <span class="st">"Pick a dataset"</span>, datasets),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    ui.output_table(<span class="st">"preview"</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    ui.download_button(<span class="st">"download_tsv"</span>, <span class="st">"Download .tsv"</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.calc</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> df():</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> data(<span class="bu">input</span>.dataset())</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.table</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> preview():</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>        req(<span class="bu">isinstance</span>(df(), pd.DataFrame))</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> df().head()</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">@session.download</span>(filename<span class="op">=</span><span class="st">'test.tsv'</span>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> download_tsv():</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">yield</span> df().to_csv(<span class="va">None</span>, sep<span class="op">=</span><span class="st">"</span><span class="ch">\t</span><span class="st">"</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-caution callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Caution
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>I could not find a way to set download filename to be in reactive context. When I replaced <code>'test.csv'</code> with <code>f"{input.data()}.tsv"</code>, it throws the following error message:</p>
+<pre><code>_send_error_response: No current reactive context</code></pre>
+</div>
+</div>
 
 
-</section>
 </section>
 </section>
 
@@ -854,11 +776,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./action-feedback.html" class="pagination-link  aria-label=" &lt;span="" feedback&lt;="" span&gt;"="">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">User Feedback</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./basic-app.html" class="pagination-link" aria-label="<span class='chapter-number'>1</span>&nbsp; <span class='chapter-title'>Your first Shiny app</span>">
-        <span class="nav-page-text"><span class="chapter-title">Your first Shiny app</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
@@ -866,4 +788,4 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-transfer.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
