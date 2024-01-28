@@ -479,3 +479,11 @@ app = App(app_ui, server)
 :::
 
 
+### Undoing an Action
+
+::: {.callout-caution}
+I could not reproduct the app in python. Here are two topics that I do not know how to implemet in Shiny for Python.
+- Let observe run only once, which is equivalent to `once = TRUE` in `observeEvent()` in R.
+- Destory existing observer from outside the scope that the observer exists.
+:::
+
