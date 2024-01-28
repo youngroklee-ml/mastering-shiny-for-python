@@ -19,6 +19,7 @@ book:
       - action-layout.qmd
       - action-graphics.qmd
       - action-feedback.qmd
+      - action-transfer.qmd
   repo-url: https://github.com/youngroklee-ml/mastering-shiny-for-python
   repo-actions: [edit, issue]
 
