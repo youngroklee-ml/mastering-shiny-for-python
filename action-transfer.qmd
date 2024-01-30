@@ -107,3 +107,76 @@ I could not find a way to set download filename to be in reactive context. When 
 _send_error_response: No current reactive context
 ```
 :::
+
+
+### Downloading reports
+
+Let us render quarto document (.qmd) to html format.
+
+````{.python filename='report.qmd'}
+---
+title: "My Document"
+format:
+    html:
+        embed-resources: true
+jupyter: python3
+---
+
+```{python}
+#| tags: [parameters]
+
+n = 10
+```
+
+
+```{python}
+import numpy as np
+from matplotlib import pyplot as plt
+
+plt.scatter(np.random.normal(size=n), np.random.normal(size=n))
+```
+````
+
+
+```{.python filename='examples/action-transfer/downloading-report/app.py'}
+from shiny import App, ui
+import subprocess
+import tempfile
+import shutil
+
+app_ui = ui.page_fluid(
+    ui.input_slider("n", "Number of points", 1, 100, 50),
+    ui.download_button("report", "Generate report"),
+)
+
+def server(input, output, session):
+    @session.download(filename="report.html")
+    def report():
+        id = ui.notification_show(
+            "Rendering report...",
+            duration=None,
+            close_button=False
+        )
+
+        with tempfile.TemporaryDirectory() as tmpdirname:
+            source_file = '/'.join([tmpdirname, "report.qmd"])
+            shutil.copy("report.qmd", source_file)
+            subprocess.run([
+                'quarto', 'render', source_file,
+                '-P', f"n:{input.n()}"
+            ])
+
+            output_file = '/'.join([tmpdirname, "report.html"])
+            html_file = open(output_file, 'r')
+            html_docs = html_file.read()
+
+        yield html_docs
+
+
+app = App(app_ui, server)
+```
+
+::: {.callout-important}
+Please note that I copied *report.qmd* file to temporary directory and rendered document within the temporary directory. If I render *.qmd* directly within app directory, the app will be automatcially reloaded when it runs with `--reload` option. VS Code extension for Shiny for Python runs the app with `--reload` option. You can avoid automatic reload by running the app in terminal with `shiny run --launch-browser app.py`. However, it would still be good to consider using temporary directory when it is applicable.
+:::
+

@@ -18,3 +18,11 @@ neiss/
 
 # unfinished/unresolved app
 /examples/action-feedback/undoing/
+
+
+# quarto render files
+/*_files/
+test.qmd
+test.html
+report.qmd
+report.html
