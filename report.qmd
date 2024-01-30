@@ -1,0 +1,21 @@
+---
+title: "My Document"
+format:
+    html:
+        embed-resources: true
+jupyter: python3
+---
+
+```{python}
+#| tags: [parameters]
+
+n = 10
+```
+
+
+```{python}
+import numpy as np
+from matplotlib import pyplot as plt
+
+plt.scatter(np.random.normal(size=n), np.random.normal(size=n))
+```
