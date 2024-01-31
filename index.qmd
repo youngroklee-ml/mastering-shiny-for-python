@@ -1,6 +1,6 @@
 # Preface {.unnumbered}
 
-This material shows how to reproduce examples in and exerciese solutions for Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/), which originally implemented in R, by using [Shiny for Python](https://shiny.posit.co/py/). My material will contain mostly only codes with few additional specific details of Shiny for Python, while it does not contain comprehensive explanation about Shiny framework. To understand Shiny framework, I highly recommend you to read Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/) first, which [online version](https://mastering-shiny.org) is also available.
+This material shows how to use [Shiny for Python](https://shiny.posit.co/py/) to implement example apps and exerciese solutions for Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/), which were originally implemented in R. My material will contain mostly only codes with few additional specific details of Shiny for Python, while it does not contain comprehensive explanation about Shiny framework. To understand Shiny framework, I highly recommend you to read Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/) first, which [online version](https://mastering-shiny.org) is also available.
 
 The followings are materials that I referenced while creating this material:
 
