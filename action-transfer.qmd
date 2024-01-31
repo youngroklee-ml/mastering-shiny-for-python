@@ -92,7 +92,7 @@ def server(input, output, session):
         req(isinstance(df(), pd.DataFrame))
         return df().head()
     
-    @session.download(filename='test.tsv')
+    @session.download(filename=lambda: f"{input.dataset()}.tsv")
     def download_tsv():
         yield df().to_csv(None, sep="\t", index=False)
 
@@ -100,12 +100,8 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
-::: {.callout-caution}
-I could not find a way to set download filename to be in reactive context. When I replaced `'test.csv'` with `f"{input.data()}.tsv"`, it throws the following error message:
-
-```
-_send_error_response: No current reactive context
-```
+::: {.callout-note}
+Please note that `filename` argument in `session.download()` should be a `lambda` function when using reactive input.
 :::
 
 

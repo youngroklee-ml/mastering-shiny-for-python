@@ -20,7 +20,7 @@ def server(input, output, session):
         req(isinstance(df(), pd.DataFrame))
         return df().head()
     
-    @session.download(filename='test.tsv')
+    @session.download(filename=lambda: f"{input.dataset()}.tsv")
     def download_tsv():
         yield df().to_csv(None, sep="\t", index=False)
 
