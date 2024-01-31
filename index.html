@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Youngrok Lee">
-<meta name="dcterms.date" content="2024-01-30">
+<meta name="dcterms.date" content="2024-01-31">
 
 <title>Mastering Shiny Examples and Solutions for Python</title>
 <style>
@@ -264,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 30, 2024</p>
+      <p class="date">January 31, 2024</p>
     </div>
   </div>
   
@@ -278,14 +278,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="preface" class="level1 unnumbered">
 <h1 class="unnumbered">Preface</h1>
-<p>This book is to reproduce Hadley Wickham’s <a href="https://mastering-shiny.org">Mastering Shiny</a> examples and exerciese solutions in Python.</p>
-<p>The followings are reference materials:</p>
+<p>This material shows how to reproduce examples in and exerciese solutions for Hadley Wickham’s <a href="https://www.oreilly.com/library/view/mastering-shiny/9781492047377/">Mastering Shiny</a>, which originally implemented in R, by using <a href="https://shiny.posit.co/py/">Shiny for Python</a>. My material will contain mostly only codes with few additional specific details of Shiny for Python, while it does not contain comprehensive explanation about Shiny framework. To understand Shiny framework, I highly recommend you to read Hadley Wickham’s <a href="https://www.oreilly.com/library/view/mastering-shiny/9781492047377/">Mastering Shiny</a> first, which <a href="https://mastering-shiny.org">online version</a> is also available.</p>
+<p>The followings are materials that I referenced while creating this material:</p>
 <ul>
 <li><a href="https://mastering-shiny.org">Mastering Shiny</a> by Hadley Wickham</li>
 <li><a href="https://shiny.posit.co/py/docs/overview.html">Learn Shiny</a> by Posit Inc.&nbsp;on Shiny for Python website</li>
 <li><a href="https://gist.github.com/wch/616934a6fe57636434154c112ac8a718">Shiny R to Python translation guide</a> by Winston Chang</li>
 <li><a href="https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md">Change Log for Shiny for Python</a></li>
 </ul>
+<p>Also, I got answers from Shiny community on Discord when I asked questions about implementing several examples. I appreciate great helps from Gordon Shotwell, Joe Cheng, and the community!</p>
 <p>Computation environment is as follows:</p>
 <section id="python" class="level2">
 <h2 class="anchored" data-anchor-id="python">Python</h2>
@@ -418,6 +419,7 @@ scipy==1.11.4
 seaborn==0.13.0
 Send2Trash==1.8.2
 shiny==0.6.1.1
+shiny_validate==0.1
 shinyswatch==0.4.2
 shinywidgets==0.2.4
 six==1.16.0
