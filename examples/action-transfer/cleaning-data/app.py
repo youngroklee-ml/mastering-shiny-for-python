@@ -1,4 +1,5 @@
 from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
+import pandas as pd
 
 ui_upload = ui.layout_sidebar(
     ui.sidebar(
@@ -33,7 +34,21 @@ app_ui = ui.page_fluid(
 
 
 def server(input: Inputs, output: Outputs, session: Session):
-    None
+    # Upload ----------------------------------
+    @reactive.calc
+    def raw():
+        req(input.file())
+        delim = None if input.delim() == "" else input.delim()
+        res = pd.read_csv(
+            input.file()[0]["datapath"], 
+            delimiter=delim,
+            skiprows=input.skip())
+        return res
+    
+    @render.table
+    def preview1():
+        return raw().head(input.rows())
+
 
 
 app = App(app_ui, server)
