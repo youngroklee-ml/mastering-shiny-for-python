@@ -1,6 +1,7 @@
 from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
 import pandas as pd
 import janitor
+import os
 
 ui_upload = ui.layout_sidebar(
     ui.sidebar(
@@ -65,5 +66,11 @@ def server(input: Inputs, output: Outputs, session: Session):
     @render.table
     def preview2():
         return tidied().head(input.rows())
+    
+    # Download --------------------------------
+    @session.download(filename=lambda: f"{os.path.splitext(input.file()[0]['name'])[0]}.tsv")
+    def download():
+        yield tidied().to_csv(None, sep="\t", index=False)
+
 
 app = App(app_ui, server)
