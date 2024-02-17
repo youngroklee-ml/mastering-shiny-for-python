@@ -1,5 +1,6 @@
 from shiny import Inputs, Outputs, Session, App, reactive, render, req, ui
 import pandas as pd
+import janitor
 
 ui_upload = ui.layout_sidebar(
     ui.sidebar(
@@ -48,7 +49,21 @@ def server(input: Inputs, output: Outputs, session: Session):
     @render.table
     def preview1():
         return raw().head(input.rows())
+    
+    # Clean ------------------------------------
+    @reactive.calc
+    def tidied():
+        out = raw()
+        if input.snake():
+            out = out.clean_names(case_type='snake')
+        if input.empty():
+            out.dropna(how='all', axis=1, inplace=True)
+        if input.constant():
+            out = out.drop_constant_columns()
+        return out
 
-
+    @render.table
+    def preview2():
+        return tidied().head(input.rows())
 
 app = App(app_ui, server)

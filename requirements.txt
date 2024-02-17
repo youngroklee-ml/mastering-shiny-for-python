@@ -22,6 +22,7 @@ cycler==0.12.1
 debugpy==1.8.0
 decorator==5.1.1
 defusedxml==0.7.1
+entrypoints==0.4
 executing==2.0.1
 faicons==0.2.1
 fastjsonschema==2.19.1
@@ -65,6 +66,8 @@ mdit-py-plugins==0.4.0
 mdurl==0.1.2
 mistune==3.0.2
 mizani==0.9.3
+multipledispatch==1.0.0
+natsort==8.4.0
 nbclient==0.9.0
 nbconvert==7.13.1
 nbformat==5.9.2
@@ -75,7 +78,9 @@ numpy==1.26.2
 overrides==7.4.0
 packaging==23.2
 pandas==2.1.4
+pandas-flavor==0.6.0
 pandocfilters==1.5.0
+papermill==2.5.0
 parso==0.8.3
 patsy==0.5.5
 pexpect==4.9.0
@@ -91,6 +96,7 @@ py2vega==0.6.1
 pycparser==2.21
 pydataset==0.2.0
 Pygments==2.17.2
+pyjanitor==0.26.0
 pyparsing==3.1.1
 python-dateutil==2.8.2
 python-json-logger==2.0.7
@@ -121,10 +127,12 @@ soupsieve==2.5
 stack-data==0.6.3
 starlette==0.34.0
 statsmodels==0.14.1
+tenacity==8.2.3
 terminado==0.18.0
 threadpoolctl==3.2.0
 tinycss2==1.2.1
 tornado==6.4
+tqdm==4.66.1
 traitlets==5.14.0
 traittypes==0.2.1
 types-python-dateutil==2.8.19.14
@@ -141,3 +149,4 @@ webencodings==0.5.1
 websocket-client==1.7.0
 websockets==12.0
 widgetsnbextension==4.0.9
+xarray==2024.1.1
