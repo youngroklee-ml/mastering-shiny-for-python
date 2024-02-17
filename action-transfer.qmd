@@ -176,3 +176,7 @@ app = App(app_ui, server)
 Please note that I copied *report.qmd* file to temporary directory and rendered document within the temporary directory. If I render *.qmd* directly within app directory, the app will be automatcially reloaded when it runs with `--reload` option. VS Code extension for Shiny for Python runs the app with `--reload` option. You can avoid automatic reload by running the app in terminal with `shiny run --launch-browser app.py`. However, it would still be good to consider using temporary directory when it is applicable.
 :::
 
+
+::: {.callout-caution}
+Shiny for python version 0.7.0 (released on 2024-01-25) added `@render.download` as a replacement of `@session.download`. As a result, `@session.download` has been deprecated. This book is written with Shiny for python version 0.6.1, which `@render.download` was not available yet.
+:::
