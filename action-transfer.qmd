@@ -1,4 +1,4 @@
-# Unloads and downloads
+# Uploads and downloads
 
 ## Upload
 
