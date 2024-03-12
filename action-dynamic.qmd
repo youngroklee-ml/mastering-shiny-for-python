@@ -1,0 +1,69 @@
+# Dynamic UI
+
+## Updating inputs
+
+```{.python filename='examples/action-dynamic/slider-min-max/app.py'}
+from shiny import App, ui, reactive
+
+app_ui = ui.page_fluid(
+    ui.input_numeric("min", "Minimum", 0),
+    ui.input_numeric("max", "Maximum", 3),
+    ui.input_slider("n", "n", min=0, max=3, value=1),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.min)
+    def _():
+        ui.update_slider("n", min=input.min())
+    
+    @reactive.effect
+    @reactive.event(input.max)
+    def _():
+        ui.update_slider("n", max=input.max())
+
+app = App(app_ui, server)
+```
+
+### Simple uses
+
+```{.python filename='examples/action-dynamic/reset/app.py'}
+from shiny import App, ui, reactive
+
+app_ui = ui.page_fluid(
+    ui.input_slider("x1", "x1", min=-10, max=10, value=0),
+    ui.input_slider("x2", "x2", min=-10, max=10, value=0),
+    ui.input_slider("x3", "x3", min=-10, max=10, value=0),
+    ui.input_action_button("reset", "Reset"),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.reset)
+    def _():
+        ui.update_slider("x1", value=0)
+        ui.update_slider("x2", value=0)
+        ui.update_slider("x3", value=0)
+
+app = App(app_ui, server)
+```
+
+
+```{.python filename='examples/action-dynamic/action-button-label/app.py'}
+from shiny import App, ui, reactive
+
+app_ui = ui.page_fluid(
+    ui.input_numeric("n", "Simulations", 10),
+    ui.input_action_button("simulate", "Simulate"),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.n)
+    def _():
+        label = f"Simulate {input.n()} times"
+        ui.update_action_button("simulate", label=label)
+
+app = App(app_ui, server)
+```
+
