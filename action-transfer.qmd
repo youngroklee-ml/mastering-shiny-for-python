@@ -4,7 +4,7 @@
 
 ### Server
 
-```{.python filename='action-transfer/upload-multiple/app.py'}
+```{.python filename='examples/action-transfer/upload-multiple/app.py'}
 from shiny import App, ui, render
 import pandas as pd
 
