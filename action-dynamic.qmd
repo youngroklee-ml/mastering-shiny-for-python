@@ -124,3 +124,41 @@ Please note that `choices=list()` was used in `ui.input_select()` when creating 
 :::{.callout-note}
 Please note that `input.ordernumber()` returns string, even though underlying data variable `ORDERNUMBER` is integer. To compare `input.ordernumber()` with the underlying data variable, I did typecasting `int(input.ordernumber())`.
 :::
+
+
+### Freezing reactive inputs
+
+```{.python filename='examples/action-dynamic/freezing-reactive-input/app.py'}
+from shiny import App, ui, reactive, render, req
+from pydataset import data
+
+app_ui = ui.page_fluid(
+    ui.input_select("dataset", "Choose a dataset", choices=("pressure", "cars")),
+    ui.input_select("column", "Choose column", choices=tuple()),
+    ui.output_text_verbatim("summary"),
+)
+
+def server(input, output, session):
+    @reactive.calc
+    def dataset():
+        return data(input.dataset())
+    
+    @reactive.effect
+    @reactive.event(input.dataset)
+    def _():
+        reactive.value.freeze(input.column)
+        ui.update_select("column", choices=dataset().columns.tolist())
+    
+    @render.text
+    def summary():
+        return dataset()[input.column()].describe()
+
+app = App(app_ui, server)
+```
+
+:::{.callout-note}
+Please note that the argument of `reactive.value.freeze()` is `input.column`, not `input.column()`.
+:::
+
+
+
