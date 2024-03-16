@@ -67,3 +67,199 @@ def server(input, output, session):
 app = App(app_ui, server)
 ```
 
+### Hierarchical select boxes
+
+```{.python filename='examples/action-dynamic/hierarchical-select-box/app.py'}
+from shiny import App, ui, reactive, req, render
+import pandas as pd
+
+sales = pd.read_csv("sales-dashboard/sales_data_sample.csv",
+                    sep=",", encoding="Latin-1", 
+                    na_values=["", "NaN"], keep_default_na=False)
+
+app_ui = ui.page_fluid(
+    ui.input_select("territory", "Territory", choices=sales['TERRITORY'].unique().tolist()),
+    ui.input_select("customername", "Customer", choices=list()),
+    ui.input_select("ordernumber", "Order number", choices=list()),
+    ui.output_table("data"),
+)
+
+def server(input, output, session):
+    @reactive.calc
+    def territory():
+        return sales[sales['TERRITORY']==input.territory()]
+    
+    @reactive.effect
+    @reactive.event(territory)
+    def _():
+        choices = territory()['CUSTOMERNAME'].unique().tolist()
+        ui.update_select("customername", choices=choices)
+
+    @reactive.calc
+    def customer():
+        req(input.customername())
+        return territory()[territory()['CUSTOMERNAME']==input.customername()]
+    
+    @reactive.effect
+    @reactive.event(customer)
+    def _():
+        choices = customer()['ORDERNUMBER'].unique().tolist()
+        ui.update_select("ordernumber", choices=choices)
+    
+    @render.table
+    def data():
+        req(input.ordernumber())
+        res = customer()[customer()['ORDERNUMBER']==int(input.ordernumber())]\
+            [['QUANTITYORDERED', 'PRICEEACH', 'PRODUCTCODE']]
+        
+        return res
+
+app = App(app_ui, server)
+```
+
+:::{.callout-note}
+Please note that `choices=list()` was used in `ui.input_select()` when creating empty drop-down list for select input control. `choices=None` does not work, because a value of `choices` must be list, tuple, or dictionary.
+:::
+
+:::{.callout-note}
+Please note that `input.ordernumber()` returns string, even though underlying data variable `ORDERNUMBER` is integer. To compare `input.ordernumber()` with the underlying data variable, I did typecasting `int(input.ordernumber())`.
+:::
+
+
+### Freezing reactive inputs
+
+```{.python filename='examples/action-dynamic/freezing-reactive-input/app.py'}
+from shiny import App, ui, reactive, render, req
+from pydataset import data
+
+app_ui = ui.page_fluid(
+    ui.input_select("dataset", "Choose a dataset", choices=("pressure", "cars")),
+    ui.input_select("column", "Choose column", choices=tuple()),
+    ui.output_text_verbatim("summary"),
+)
+
+def server(input, output, session):
+    @reactive.calc
+    def dataset():
+        return data(input.dataset())
+    
+    @reactive.effect
+    @reactive.event(input.dataset)
+    def _():
+        reactive.value.freeze(input.column)
+        ui.update_select("column", choices=dataset().columns.tolist())
+    
+    @render.text
+    def summary():
+        return dataset()[input.column()].describe()
+
+app = App(app_ui, server)
+```
+
+:::{.callout-note}
+Please note that the argument of `reactive.value.freeze()` is `input.column`, not `input.column()`.
+:::
+
+
+### Exercise
+
+1. Let date input allow a user to select only dates in the selected year.
+
+```{.python filename='solutions/action-dynamic/updating-inputs/update-year/app.py'}
+from shiny import App, ui, reactive
+import datetime
+
+app_ui = ui.page_fluid(
+    ui.input_numeric("year", "year", value=2020),
+    ui.input_date("date", "date", value=datetime.date(2020, 1, 1)),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.year)
+    def _():
+        d = datetime.date(
+            input.year(),
+            input.date().month,
+            28 if input.date().month == 2 and input.date().day == 29 else input.date().day
+        )
+        ui.update_date("date", 
+                       value=d,
+                       min=datetime.date(input.year(), 1, 1),
+                       max=datetime.date(input.year(), 12, 31))
+
+app = App(app_ui, server)
+```
+
+2. Hierarchical select boxes for state and county
+
+```{.python filename='solutions/action-dynamic/updating-inputs/update-county/app.py'}
+# Please download county.csv from https://www.openintro.org/data/
+# and store it to data/ folder
+# before running this app
+
+from shiny import App, ui, reactive
+import pandas as pd
+
+df = pd.read_csv("data/county.csv")
+states = df['state'].unique().tolist()
+
+app_ui = ui.page_fluid(
+    ui.input_select("state", "State", choices=states),
+    ui.input_select("county", "County", choices=list()),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.state)
+    def _():
+        county_label = "County"
+        if input.state()=="Louisiana":
+            county_label = "Parish"
+        elif input.state()=="Alaska":
+            county_label = "Borough"
+
+        counties = df[df['state']==input.state()]['name'].to_list()
+        ui.update_select("county", label=county_label, choices=counties)
+
+
+app = App(app_ui, server)
+```
+
+3 & 4.
+
+
+```{.python filename='solutions/action-dynamic/updating-inputs/gapminder/app.py'}
+from shiny import App, ui, reactive, render
+from gapminder import gapminder
+
+continents = gapminder['continent'].unique().tolist()
+
+app_ui = ui.page_fluid(
+    ui.input_select("continent", "Continent", choices=["(All)"] + continents),
+    ui.input_select("country", "Country", choices=list()),
+    ui.output_table("data"),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.continent)
+    def _():
+        if input.continent() == "(All)":
+            countries = gapminder['country'].unique().tolist()
+        else:
+            countries = gapminder[gapminder['continent']==input.continent()]['country'].unique().tolist()
+        ui.update_select("country", choices=countries)
+
+    @reactive.calc
+    def country():
+        return gapminder[gapminder['country']==input.country()]
+    
+    @render.table
+    def data():
+        return country()
+
+app = App(app_ui, server)
+```
+
+

@@ -15,6 +15,7 @@ __pycache__/
 # exclude data folder
 neiss/
 /sales-dashboard/
+data/
 
 # unfinished/unresolved app
 /examples/action-feedback/undoing/
