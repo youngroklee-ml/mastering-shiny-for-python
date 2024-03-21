@@ -404,3 +404,93 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 ```
+
+### Exercises
+
+1. Show additional control only if the user checks an "advanced" checkbox.
+
+
+```{.python filename='solutions/action-dynamic/dynamic-visibility/checkbox-for-control/app.py'}
+from shiny import App, ui, reactive
+
+app_ui = ui.page_fluid(
+    ui.input_checkbox("advanced", "Advanced"),
+    ui.navset_hidden(
+        ui.nav_panel("empty"),
+        ui.nav_panel("additional",
+                     ui.input_numeric("number", "Additional control", 
+                                      value=1, min=0, max=10)
+        ),
+        id="wizard"
+    )
+)
+
+def server(input, output, session):
+    @reactive.effect
+    def _():
+        ui.update_navs("wizard", 
+                       selected="additional" if input.advanced() else "empty")
+
+
+app = App(app_ui, server)
+```
+
+2. Allow the user to choose which geom to use.
+
+```{.python filename='solutions/action-dynamic/diamonds/app.py'}
+from shiny import App, ui, reactive, render
+from pydataset import data
+from plotnine import ggplot, aes, geom_histogram, geom_freqpoly, geom_density
+
+diamonds = data("diamonds")
+
+app_ui = ui.page_fluid(
+    ui.input_select("geom", "geom function",
+        choices=["geom_histogram", "geom_freqpoly", "geom_density"]
+    ),
+    ui.navset_hidden(
+        ui.nav_panel("param1",
+            ui.input_numeric("binwidth", "binwidth", value=0.1, step=0.1),
+        ),
+        ui.nav_panel("param2",
+            ui.input_select("bw", "bw", 
+                choices=["nrd0", "normal_reference", "scott", "silverman"],
+                selected="nrd0"
+            ),
+        ),
+        id="params",
+    ),
+    ui.output_plot("plot"),
+)
+
+def server(input, output, session):
+    @reactive.effect
+    @reactive.event(input.geom)
+    def _():
+        match input.geom():
+            case "geom_histogram":
+                panel = "param1"
+            case "geom_freqpoly":
+                panel = "param1"
+            case "geom_density":
+                panel = "param2"
+
+        ui.update_navs("params", selected=panel)
+
+    @render.plot
+    def plot():
+        plot = ggplot(diamonds, aes('carat'))
+        if input.geom() == "geom_histogram":
+            res = plot + geom_histogram(binwidth=input.binwidth())
+        elif input.geom() == "geom_freqpoly":
+            res = plot + geom_freqpoly(binwidth=input.binwidth())
+        elif input.geom() == "geom_density":
+            res = plot + geom_density(bw=input.bw())
+
+        return res
+
+app = App(app_ui, server)
+```
+
+
+3. 
