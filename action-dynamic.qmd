@@ -493,4 +493,46 @@ app = App(app_ui, server)
 ```
 
 
-3. 
+## Creating UI with code
+
+### Getting started
+
+```{.python filename='examples/action-dynamic/creating-ui/app.py'}
+from shiny import App, ui, reactive, render, req
+
+app_ui = ui.page_fluid(
+    ui.input_text("label", "label"),
+    ui.input_select("type", "type", choices=("slider", "numeric")),
+    ui.output_ui("numeric"),
+)
+
+def server(input, output, session):
+    @render.ui
+    def numeric():
+        with reactive.isolate():
+            try:
+                value = input.dynamic()
+            except:
+                value = 0
+
+        if input.type() == "slider":
+            res = ui.input_slider("dynamic", input.label(), value=value, min=0, max=10)
+        else:
+            res = ui.input_numeric("dynamic", input.label(), value=value, min=0, max=10)
+
+        return res
+
+app = App(app_ui, server)
+```
+
+:::{.callout-note}
+Simply including the following code did not create UI. 
+```{.python}
+with reactive.isolate():
+    value = input.dynamic()
+```
+
+I guess it is because `input.dynamic()` sliently throw an error and does not proceed the remaining tasks in the render function. After including explicit error handling with `try` and `except`, it performed as desired.
+:::
+
+
