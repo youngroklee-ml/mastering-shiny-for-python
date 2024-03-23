@@ -588,3 +588,75 @@ def server(input, output, session):
     
 app = App(app_ui, server)
 ```
+
+### Dynamic filtering
+
+```{.python file}
+from shiny import App, ui, reactive, render
+import numpy as np
+import pandas as pd
+from pandas.api.types import is_numeric_dtype, is_string_dtype
+from pydataset import data
+
+def make_ui(x, var):
+    if is_numeric_dtype(x):
+        rng = (x.min(), x.max())
+        res = ui.input_slider(var, var, min=rng[0], max=rng[1], value=rng)
+    elif is_string_dtype(x):
+        levs = list(np.unique(x))
+        res = ui.input_select(var, var, choices=levs, selected=levs, multiple=True)
+    else:
+        res = None
+
+    return res
+
+def filter_var(x, val):
+    if is_numeric_dtype(x):
+        res = (~np.isnan(x)) & (x >= val[0]) & (x <= val[1])
+    elif is_string_dtype(x):
+        res = np.isin(x, val)
+    else:
+        res = True
+    
+    return res
+
+iris = data('iris')
+
+app_ui = ui.page_fluid(
+    ui.layout_sidebar(
+        ui.sidebar(
+            make_ui(iris['Sepal.Length'], "Sepal_Length"),
+            make_ui(iris['Sepal.Width'], "Sepal_Width"),
+            make_ui(iris['Species'], "Species"),
+        ),
+        ui.output_table("data"),
+    )
+)
+
+def server(input, output, session):
+    @reactive.calc
+    def selected():
+        res = filter_var(iris['Sepal.Length'], input['Sepal_Length']()) & \
+            filter_var(iris['Sepal.Width'], input['Sepal_Width']()) &\
+            filter_var(iris['Species'], input['Species']())
+        
+        return res
+    
+    @render.table
+    def data():
+        return iris[selected()].head(12)
+
+app = App(app_ui, server)
+```
+
+:::{.callout-caution}
+Shiny for Python does not allow period(`.`) be a part of input ID. Therefore, I replaced `.` with `_` when creating input control while let column names still have a period.
+
+This makes it difficult to create more generalized app that filter any (even user-uploaded) data with any column name type, as shown in Mastering Shiny book for R.
+:::
+
+:::{.callout-note}
+I used `is_string_dtype()` to check whether the column is for categorical variable because the `Species` column in `iris` data has not been converted to categorical variable yet. It would be better to consider converting columns to Categorical dtype first and use a function `is_categorical_dtype()` or its equivalent.
+:::
+
+
