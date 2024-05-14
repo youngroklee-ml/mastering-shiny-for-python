@@ -739,9 +739,165 @@ I used `is_string_dtype()` to check whether the column is for categorical variab
 :::
 
 
-
-
 ### Dialog boxes
 
 
+### Excercises
 
+1. 
+
+```{.python, filename='solutions/action-dynamic/creating-ui/keep-values-in-sync/app.py'}
+from shiny import App, reactive, render, req, ui
+
+app_ui = ui.page_fluid(
+    ui.input_select("type", "type", ["slider", "numeric"]),
+    ui.navset_hidden(
+        ui.nav_panel("slider",
+                     ui.input_slider("n_slider", "n", value=0, min=0, max=100)),
+        ui.nav_panel("numeric",
+                     ui.input_numeric("n_numeric", "n", value=0, min=0, max=100)),
+        id="wizard",
+    ),
+)
+
+
+def server(input, output, session):
+    @reactive.effect
+    def _():
+        ui.update_navs("wizard", selected=input.type())
+    
+    @reactive.effect
+    @reactive.event(input.n_slider)
+    def _():
+        ui.update_numeric("n_numeric", value=input.n_slider())
+
+    @reactive.effect
+    @reactive.event(input.n_numeric)
+    def _():
+        ui.update_slider("n_slider", value=input.n_numeric())
+    
+
+app = App(app_ui, server)
+```
+
+:::{.callout-warning}
+When switching from numeric input control to slider input control, select value of slider input appears to be 0 for <1 second prior to automatically showing a synced value. I hope to find a solution to avoid this issue.
+:::
+
+
+2. 
+
+```{.python, filename='solutions/action-dynamic/creating-ui/passwrd-dialog/app.py'}
+from shiny import App, reactive, render, req, ui
+
+app_ui = ui.page_fluid(
+    ui.input_action_button("go", "Enter password"),
+    ui.output_text("text"),
+)
+
+def server(input, output, session):
+    pw = reactive.value('')
+
+    @reactive.effect
+    @reactive.event(input.go)
+    def _():
+        m = ui.modal(
+            ui.input_password("password", "Password: ", value=pw.get()),
+            ui.input_action_button("submit", "Submit"),
+            title="Please enter your password",
+            footer=None,
+        )
+        ui.modal_show(m)
+
+    @reactive.calc
+    @reactive.event(input.submit)
+    def get_password():
+        res = input.password()
+        pw.set(res)
+        ui.modal_remove()
+        return res
+
+    @render.text
+    def text():
+        if get_password()=="":
+            return "No password"
+        
+        return "Password entered"
+
+
+app = App(app_ui, server)
+```
+
+4. 
+
+```{.python, filename='solutions/action-dynamic/creating-ui/dynamic-filtering-date/app.py'}
+from shiny import App, ui, reactive, render
+import numpy as np
+import pandas as pd
+from pandas.api.types import is_numeric_dtype, is_string_dtype, is_datetime64_dtype
+import janitor
+from functools import reduce
+from datetime import datetime
+
+data = pd.DataFrame({
+    'date': pd.to_datetime(['2021-01-01', '2021-01-02', '2021-01-03']).to_pydatetime(),
+    'datetime': pd.to_datetime(['2021-01-01 00:00:00', '2021-01-02 01:00:00', '2021-01-03 23:59:59'])
+})
+
+def make_ui(x, var):
+    if is_numeric_dtype(x):
+        rng = (x.min(), x.max())
+        res = ui.input_slider(var, var, min=rng[0], max=rng[1], value=rng)
+    elif is_string_dtype(x):
+        levs = list(np.unique(x))
+        res = ui.input_select(var, var, choices=levs, selected=levs, multiple=True)
+    elif is_datetime64_dtype(x):
+        rng = (x.min().to_pydatetime().date(), x.max().to_pydatetime().date())
+        res = ui.input_date_range(var, var, min=rng[0], max=rng[1], start=rng[0], end=rng[1])
+    else:
+        res = None
+
+    return res
+
+def filter_var(x, val):
+    if is_numeric_dtype(x):
+        res = (~np.isnan(x)) & (x >= val[0]) & (x <= val[1])
+    elif is_string_dtype(x):
+        res = np.isin(x, val)
+    elif is_datetime64_dtype(x):
+        print(val)
+        res = (~np.isnan(x)) & \
+            (x >= datetime.combine(val[0], datetime.min.time())) & \
+            (x <= datetime.combine(val[1], datetime.max.time()))
+    else:
+        res = True
+    
+    return res
+
+app_ui = ui.page_fluid(
+    ui.layout_sidebar(
+        ui.sidebar(
+            ui.output_ui("_filter"),
+        ),
+        ui.output_table("_data"),
+    )
+)
+
+def server(input, output, session):
+    @render.ui
+    def _filter():
+        return list(map(lambda x: make_ui(data[x], x), data.columns))
+
+    @reactive.calc
+    def selected():
+        each_var = map(lambda x: filter_var(data[x], input[x]()), data.columns)
+        res = reduce(lambda x, y: x & y, each_var)
+        
+        return res
+    
+    @render.table
+    def _data():
+        return data[selected()].head(12)
+
+app = App(app_ui, server)
+```
