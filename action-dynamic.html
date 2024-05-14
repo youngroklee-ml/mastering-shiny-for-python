@@ -241,7 +241,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting started</a></li>
   <li><a href="#multiple-controls" id="toc-multiple-controls" class="nav-link" data-scroll-target="#multiple-controls">Multiple controls</a></li>
   <li><a href="#dynamic-filtering" id="toc-dynamic-filtering" class="nav-link" data-scroll-target="#dynamic-filtering">Dynamic filtering</a></li>
-  <li><a href="#dialog-boxes" id="toc-dialog-boxes" class="nav-link" data-scroll-target="#dialog-boxes">Dialog boxes</a></li>
   <li><a href="#excercises" id="toc-excercises" class="nav-link" data-scroll-target="#excercises">Excercises</a></li>
   </ul></li>
   </ul>
@@ -1101,98 +1100,182 @@ Note
 </div>
 </div>
 </section>
-<section id="dialog-boxes" class="level3">
-<h3 class="anchored" data-anchor-id="dialog-boxes">Dialog boxes</h3>
-</section>
 <section id="excercises" class="level3">
 <h3 class="anchored" data-anchor-id="excercises">Excercises</h3>
 <ol type="1">
 <li></li>
 </ol>
-<p>```{.python, filename=‘solutions/action-dynamic/creating-ui/keep-values-in-sync/app.py’} from shiny import App, reactive, render, req, ui</p>
-<p>app_ui = ui.page_fluid( ui.input_select(“type”, “type”, [“slider”, “numeric”]), ui.navset_hidden( ui.nav_panel(“slider”, ui.input_slider(“n_slider”, “n”, value=0, min=0, max=100)), ui.nav_panel(“numeric”, ui.input_numeric(“n_numeric”, “n”, value=0, min=0, max=100)), id=“wizard”, ), )</p>
-<p>def server(input, output, session): <span class="citation" data-cites="reactive.effect">@reactive.effect</span> def _(): ui.update_navs(“wizard”, selected=input.type())</p>
-<pre><code>@reactive.effect
-@reactive.event(input.n_slider)
-def _():
-    ui.update_numeric("n_numeric", value=input.n_slider())
-
-@reactive.effect
-@reactive.event(input.n_numeric)
-def _():
-    ui.update_slider("n_slider", value=input.n_numeric())</code></pre>
-<p>app = App(app_ui, server)</p>
-<pre><code>
-:::{.callout-warning}
-When switching from numeric input control to slider input control, select value of slider input appears to be 0 for &lt;1 second prior to automatically showing a synced value. I hope to find a solution to avoid this issue.
-:::
-
-
-2. 
-
-```{.python, filename='solutions/action-dynamic/creating-ui/passwrd-dialog/app.py'}
-from shiny import App, reactive, render, req, ui
-
-app_ui = ui.page_fluid(
-    ui.input_action_button("go", "Enter password"),
-    ui.output_text("text"),
-)
-
-def server(input, output, session):
-    pw = reactive.value('')
-
-    @reactive.effect
-    @reactive.event(input.go)
-    def _():
-        m = ui.modal(
-            ui.input_password("password", "Password: ", value=pw.get()),
-            ui.input_action_button("submit", "Submit"),
-            title="Please enter your password",
-            footer=None,
-        )
-        ui.modal_show(m)
-
-    @reactive.calc
-    @reactive.event(input.submit)
-    def get_password():
-        res = input.password()
-        pw.set(res)
-        ui.modal_remove()
-        return res
-
-    @render.text
-    def text():
-        if get_password()=="":
-            return "No password"
-        
-        return "Password entered"
-
-
-app = App(app_ui, server)</code></pre>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solutions/action-dynamic/creating-ui/keep-values-in-sync/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, reactive, render, req, ui</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    ui.input_select(<span class="st">"type"</span>, <span class="st">"type"</span>, [<span class="st">"slider"</span>, <span class="st">"numeric"</span>]),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    ui.navset_hidden(</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>        ui.nav_panel(<span class="st">"slider"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                     ui.input_slider(<span class="st">"n_slider"</span>, <span class="st">"n"</span>, value<span class="op">=</span><span class="dv">0</span>, <span class="bu">min</span><span class="op">=</span><span class="dv">0</span>, <span class="bu">max</span><span class="op">=</span><span class="dv">100</span>)),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        ui.nav_panel(<span class="st">"numeric"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                     ui.input_numeric(<span class="st">"n_numeric"</span>, <span class="st">"n"</span>, value<span class="op">=</span><span class="dv">0</span>, <span class="bu">min</span><span class="op">=</span><span class="dv">0</span>, <span class="bu">max</span><span class="op">=</span><span class="dv">100</span>)),</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>        <span class="bu">id</span><span class="op">=</span><span class="st">"wizard"</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.effect</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _():</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>        ui.update_navs(<span class="st">"wizard"</span>, selected<span class="op">=</span><span class="bu">input</span>.<span class="bu">type</span>())</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.effect</span></span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.event</span>(<span class="bu">input</span>.n_slider)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _():</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>        ui.update_numeric(<span class="st">"n_numeric"</span>, value<span class="op">=</span><span class="bu">input</span>.n_slider())</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.effect</span></span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.event</span>(<span class="bu">input</span>.n_numeric)</span>
+<span id="cb19-27"><a href="#cb19-27" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _():</span>
+<span id="cb19-28"><a href="#cb19-28" aria-hidden="true" tabindex="-1"></a>        ui.update_slider(<span class="st">"n_slider"</span>, value<span class="op">=</span><span class="bu">input</span>.n_numeric())</span>
+<span id="cb19-29"><a href="#cb19-29" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb19-30"><a href="#cb19-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-31"><a href="#cb19-31" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When switching from numeric input control to slider input control, select value of slider input appears to be 0 for &lt;1 second prior to automatically showing a synced value. I hope to find a solution to avoid this issue.</p>
+</div>
+</div>
+<ol start="2" type="1">
+<li></li>
+</ol>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solutions/action-dynamic/creating-ui/passwrd-dialog/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, reactive, render, req, ui</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    ui.input_action_button(<span class="st">"go"</span>, <span class="st">"Enter password"</span>),</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    ui.output_text(<span class="st">"text"</span>),</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>    pw <span class="op">=</span> reactive.value(<span class="st">''</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.effect</span></span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.event</span>(<span class="bu">input</span>.go)</span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _():</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true" tabindex="-1"></a>        m <span class="op">=</span> ui.modal(</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true" tabindex="-1"></a>            ui.input_password(<span class="st">"password"</span>, <span class="st">"Password: "</span>, value<span class="op">=</span>pw.get()),</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true" tabindex="-1"></a>            ui.input_action_button(<span class="st">"submit"</span>, <span class="st">"Submit"</span>),</span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true" tabindex="-1"></a>            title<span class="op">=</span><span class="st">"Please enter your password"</span>,</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true" tabindex="-1"></a>            footer<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true" tabindex="-1"></a>        ui.modal_show(m)</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.calc</span></span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.event</span>(<span class="bu">input</span>.submit)</span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_password():</span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> <span class="bu">input</span>.password()</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true" tabindex="-1"></a>        pw.<span class="bu">set</span>(res)</span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true" tabindex="-1"></a>        ui.modal_remove()</span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.text</span></span>
+<span id="cb20-31"><a href="#cb20-31" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> text():</span>
+<span id="cb20-32"><a href="#cb20-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> get_password()<span class="op">==</span><span class="st">""</span>:</span>
+<span id="cb20-33"><a href="#cb20-33" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="st">"No password"</span></span>
+<span id="cb20-34"><a href="#cb20-34" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb20-35"><a href="#cb20-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Password entered"</span></span>
+<span id="cb20-36"><a href="#cb20-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-37"><a href="#cb20-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-38"><a href="#cb20-38" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <ol start="4" type="1">
 <li></li>
 </ol>
-<p>```{.python, filename=‘solutions/action-dynamic/creating-ui/dynamic-filtering-date/app.py’} from shiny import App, ui, reactive, render import numpy as np import pandas as pd from pandas.api.types import is_numeric_dtype, is_string_dtype, is_datetime64_dtype import janitor from functools import reduce from datetime import datetime</p>
-<p>data = pd.DataFrame({ ‘date’: pd.to_datetime([‘2021-01-01’, ‘2021-01-02’, ‘2021-01-03’]).to_pydatetime(), ‘datetime’: pd.to_datetime([‘2021-01-01 00:00:00’, ‘2021-01-02 01:00:00’, ‘2021-01-03 23:59:59’]) })</p>
-<p>def make_ui(x, var): if is_numeric_dtype(x): rng = (x.min(), x.max()) res = ui.input_slider(var, var, min=rng[0], max=rng[1], value=rng) elif is_string_dtype(x): levs = list(np.unique(x)) res = ui.input_select(var, var, choices=levs, selected=levs, multiple=True) elif is_datetime64_dtype(x): rng = (x.min().to_pydatetime().date(), x.max().to_pydatetime().date()) res = ui.input_date_range(var, var, min=rng[0], max=rng[1], start=rng[0], end=rng[1]) else: res = None</p>
-<pre><code>return res</code></pre>
-<p>def filter_var(x, val): if is_numeric_dtype(x): res = (~np.isnan(x)) &amp; (x &gt;= val[0]) &amp; (x &lt;= val[1]) elif is_string_dtype(x): res = np.isin(x, val) elif is_datetime64_dtype(x): print(val) res = (~np.isnan(x)) &amp;<br>
-(x &gt;= datetime.combine(val[0], datetime.min.time())) &amp;<br>
-(x &lt;= datetime.combine(val[1], datetime.max.time())) else: res = True</p>
-<pre><code>return res</code></pre>
-<p>app_ui = ui.page_fluid( ui.layout_sidebar( ui.sidebar( ui.output_ui(“_filter”), ), ui.output_table(“_data”), ) )</p>
-<p>def server(input, output, session): <span class="citation" data-cites="render.ui">@render.ui</span> def _filter(): return list(map(lambda x: make_ui(data[x], x), data.columns))</p>
-<pre><code>@reactive.calc
-def selected():
-    each_var = map(lambda x: filter_var(data[x], input[x]()), data.columns)
-    res = reduce(lambda x, y: x &amp; y, each_var)
-    
-    return res
-
-@render.table
-def _data():
-    return data[selected()].head(12)</code></pre>
-<p>app = App(app_ui, server) ```</p>
+<div class="code-with-filename">
+<div class="code-with-filename-file">
+<pre><strong>solutions/action-dynamic/creating-ui/dynamic-filtering-date/app.py</strong></pre>
+</div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> shiny <span class="im">import</span> App, ui, reactive, render</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas.api.types <span class="im">import</span> is_numeric_dtype, is_string_dtype, is_datetime64_dtype</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> janitor</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> functools <span class="im">import</span> <span class="bu">reduce</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">'date'</span>: pd.to_datetime([<span class="st">'2021-01-01'</span>, <span class="st">'2021-01-02'</span>, <span class="st">'2021-01-03'</span>]).to_pydatetime(),</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="st">'datetime'</span>: pd.to_datetime([<span class="st">'2021-01-01 00:00:00'</span>, <span class="st">'2021-01-02 01:00:00'</span>, <span class="st">'2021-01-03 23:59:59'</span>])</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_ui(x, var):</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_numeric_dtype(x):</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>        rng <span class="op">=</span> (x.<span class="bu">min</span>(), x.<span class="bu">max</span>())</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> ui.input_slider(var, var, <span class="bu">min</span><span class="op">=</span>rng[<span class="dv">0</span>], <span class="bu">max</span><span class="op">=</span>rng[<span class="dv">1</span>], value<span class="op">=</span>rng)</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> is_string_dtype(x):</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>        levs <span class="op">=</span> <span class="bu">list</span>(np.unique(x))</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> ui.input_select(var, var, choices<span class="op">=</span>levs, selected<span class="op">=</span>levs, multiple<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> is_datetime64_dtype(x):</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>        rng <span class="op">=</span> (x.<span class="bu">min</span>().to_pydatetime().date(), x.<span class="bu">max</span>().to_pydatetime().date())</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> ui.input_date_range(var, var, <span class="bu">min</span><span class="op">=</span>rng[<span class="dv">0</span>], <span class="bu">max</span><span class="op">=</span>rng[<span class="dv">1</span>], start<span class="op">=</span>rng[<span class="dv">0</span>], end<span class="op">=</span>rng[<span class="dv">1</span>])</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> filter_var(x, val):</span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> is_numeric_dtype(x):</span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> (<span class="op">~</span>np.isnan(x)) <span class="op">&amp;</span> (x <span class="op">&gt;=</span> val[<span class="dv">0</span>]) <span class="op">&amp;</span> (x <span class="op">&lt;=</span> val[<span class="dv">1</span>])</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> is_string_dtype(x):</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> np.isin(x, val)</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> is_datetime64_dtype(x):</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> (<span class="op">~</span>np.isnan(x)) <span class="op">&amp;</span> <span class="op">\</span></span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>            (x <span class="op">&gt;=</span> datetime.combine(val[<span class="dv">0</span>], datetime.<span class="bu">min</span>.time())) <span class="op">&amp;</span> <span class="op">\</span></span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>            (x <span class="op">&lt;=</span> datetime.combine(val[<span class="dv">1</span>], datetime.<span class="bu">max</span>.time()))</span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> res</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>app_ui <span class="op">=</span> ui.page_fluid(</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>    ui.layout_sidebar(</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>        ui.sidebar(</span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>            ui.output_ui(<span class="st">"_filter"</span>),</span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>        ui.output_table(<span class="st">"_data"</span>),</span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> server(<span class="bu">input</span>, output, session):</span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.ui</span></span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _filter():</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">map</span>(<span class="kw">lambda</span> x: make_ui(data[x], x), data.columns))</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">@reactive.calc</span></span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> selected():</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>        each_var <span class="op">=</span> <span class="bu">map</span>(<span class="kw">lambda</span> x: filter_var(data[x], <span class="bu">input</span>[x]()), data.columns)</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>        res <span class="op">=</span> <span class="bu">reduce</span>(<span class="kw">lambda</span> x, y: x <span class="op">&amp;</span> y, each_var)</span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> res</span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">@render.table</span></span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> _data():</span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> data[selected()].head(<span class="dv">12</span>)</span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>app <span class="op">=</span> App(app_ui, server)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
 </section>
