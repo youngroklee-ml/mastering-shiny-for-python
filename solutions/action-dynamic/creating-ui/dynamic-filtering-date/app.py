@@ -32,7 +32,6 @@ def filter_var(x, val):
     elif is_string_dtype(x):
         res = np.isin(x, val)
     elif is_datetime64_dtype(x):
-        print(val)
         res = (~np.isnan(x)) & \
             (x >= datetime.combine(val[0], datetime.min.time())) & \
             (x <= datetime.combine(val[1], datetime.max.time()))
