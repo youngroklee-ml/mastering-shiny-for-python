@@ -242,6 +242,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#multiple-controls" id="toc-multiple-controls" class="nav-link" data-scroll-target="#multiple-controls">Multiple controls</a></li>
   <li><a href="#dynamic-filtering" id="toc-dynamic-filtering" class="nav-link" data-scroll-target="#dynamic-filtering">Dynamic filtering</a></li>
   <li><a href="#dialog-boxes" id="toc-dialog-boxes" class="nav-link" data-scroll-target="#dialog-boxes">Dialog boxes</a></li>
+  <li><a href="#excercises" id="toc-excercises" class="nav-link" data-scroll-target="#excercises">Excercises</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/edit/main/action-dynamic.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/youngroklee-ml/mastering-shiny-for-python/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -1102,6 +1103,96 @@ Note
 </section>
 <section id="dialog-boxes" class="level3">
 <h3 class="anchored" data-anchor-id="dialog-boxes">Dialog boxes</h3>
+</section>
+<section id="excercises" class="level3">
+<h3 class="anchored" data-anchor-id="excercises">Excercises</h3>
+<ol type="1">
+<li></li>
+</ol>
+<p>```{.python, filename=‘solutions/action-dynamic/creating-ui/keep-values-in-sync/app.py’} from shiny import App, reactive, render, req, ui</p>
+<p>app_ui = ui.page_fluid( ui.input_select(“type”, “type”, [“slider”, “numeric”]), ui.navset_hidden( ui.nav_panel(“slider”, ui.input_slider(“n_slider”, “n”, value=0, min=0, max=100)), ui.nav_panel(“numeric”, ui.input_numeric(“n_numeric”, “n”, value=0, min=0, max=100)), id=“wizard”, ), )</p>
+<p>def server(input, output, session): <span class="citation" data-cites="reactive.effect">@reactive.effect</span> def _(): ui.update_navs(“wizard”, selected=input.type())</p>
+<pre><code>@reactive.effect
+@reactive.event(input.n_slider)
+def _():
+    ui.update_numeric("n_numeric", value=input.n_slider())
+
+@reactive.effect
+@reactive.event(input.n_numeric)
+def _():
+    ui.update_slider("n_slider", value=input.n_numeric())</code></pre>
+<p>app = App(app_ui, server)</p>
+<pre><code>
+:::{.callout-warning}
+When switching from numeric input control to slider input control, select value of slider input appears to be 0 for &lt;1 second prior to automatically showing a synced value. I hope to find a solution to avoid this issue.
+:::
+
+
+2. 
+
+```{.python, filename='solutions/action-dynamic/creating-ui/passwrd-dialog/app.py'}
+from shiny import App, reactive, render, req, ui
+
+app_ui = ui.page_fluid(
+    ui.input_action_button("go", "Enter password"),
+    ui.output_text("text"),
+)
+
+def server(input, output, session):
+    pw = reactive.value('')
+
+    @reactive.effect
+    @reactive.event(input.go)
+    def _():
+        m = ui.modal(
+            ui.input_password("password", "Password: ", value=pw.get()),
+            ui.input_action_button("submit", "Submit"),
+            title="Please enter your password",
+            footer=None,
+        )
+        ui.modal_show(m)
+
+    @reactive.calc
+    @reactive.event(input.submit)
+    def get_password():
+        res = input.password()
+        pw.set(res)
+        ui.modal_remove()
+        return res
+
+    @render.text
+    def text():
+        if get_password()=="":
+            return "No password"
+        
+        return "Password entered"
+
+
+app = App(app_ui, server)</code></pre>
+<ol start="4" type="1">
+<li></li>
+</ol>
+<p>```{.python, filename=‘solutions/action-dynamic/creating-ui/dynamic-filtering-date/app.py’} from shiny import App, ui, reactive, render import numpy as np import pandas as pd from pandas.api.types import is_numeric_dtype, is_string_dtype, is_datetime64_dtype import janitor from functools import reduce from datetime import datetime</p>
+<p>data = pd.DataFrame({ ‘date’: pd.to_datetime([‘2021-01-01’, ‘2021-01-02’, ‘2021-01-03’]).to_pydatetime(), ‘datetime’: pd.to_datetime([‘2021-01-01 00:00:00’, ‘2021-01-02 01:00:00’, ‘2021-01-03 23:59:59’]) })</p>
+<p>def make_ui(x, var): if is_numeric_dtype(x): rng = (x.min(), x.max()) res = ui.input_slider(var, var, min=rng[0], max=rng[1], value=rng) elif is_string_dtype(x): levs = list(np.unique(x)) res = ui.input_select(var, var, choices=levs, selected=levs, multiple=True) elif is_datetime64_dtype(x): rng = (x.min().to_pydatetime().date(), x.max().to_pydatetime().date()) res = ui.input_date_range(var, var, min=rng[0], max=rng[1], start=rng[0], end=rng[1]) else: res = None</p>
+<pre><code>return res</code></pre>
+<p>def filter_var(x, val): if is_numeric_dtype(x): res = (~np.isnan(x)) &amp; (x &gt;= val[0]) &amp; (x &lt;= val[1]) elif is_string_dtype(x): res = np.isin(x, val) elif is_datetime64_dtype(x): print(val) res = (~np.isnan(x)) &amp;<br>
+(x &gt;= datetime.combine(val[0], datetime.min.time())) &amp;<br>
+(x &lt;= datetime.combine(val[1], datetime.max.time())) else: res = True</p>
+<pre><code>return res</code></pre>
+<p>app_ui = ui.page_fluid( ui.layout_sidebar( ui.sidebar( ui.output_ui(“_filter”), ), ui.output_table(“_data”), ) )</p>
+<p>def server(input, output, session): <span class="citation" data-cites="render.ui">@render.ui</span> def _filter(): return list(map(lambda x: make_ui(data[x], x), data.columns))</p>
+<pre><code>@reactive.calc
+def selected():
+    each_var = map(lambda x: filter_var(data[x], input[x]()), data.columns)
+    res = reduce(lambda x, y: x &amp; y, each_var)
+    
+    return res
+
+@render.table
+def _data():
+    return data[selected()].head(12)</code></pre>
+<p>app = App(app_ui, server) ```</p>
 
 
 </section>
