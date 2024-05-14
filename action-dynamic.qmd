@@ -739,14 +739,12 @@ I used `is_string_dtype()` to check whether the column is for categorical variab
 :::
 
 
-### Dialog boxes
-
 
 ### Excercises
 
 1. 
 
-```{.python, filename='solutions/action-dynamic/creating-ui/keep-values-in-sync/app.py'}
+```{.python filename='solutions/action-dynamic/creating-ui/keep-values-in-sync/app.py'}
 from shiny import App, reactive, render, req, ui
 
 app_ui = ui.page_fluid(
@@ -787,7 +785,7 @@ When switching from numeric input control to slider input control, select value 
 
 2. 
 
-```{.python, filename='solutions/action-dynamic/creating-ui/passwrd-dialog/app.py'}
+```{.python filename='solutions/action-dynamic/creating-ui/passwrd-dialog/app.py'}
 from shiny import App, reactive, render, req, ui
 
 app_ui = ui.page_fluid(
@@ -830,7 +828,7 @@ app = App(app_ui, server)
 
 4. 
 
-```{.python, filename='solutions/action-dynamic/creating-ui/dynamic-filtering-date/app.py'}
+```{.python filename='solutions/action-dynamic/creating-ui/dynamic-filtering-date/app.py'}
 from shiny import App, ui, reactive, render
 import numpy as np
 import pandas as pd
@@ -865,7 +863,6 @@ def filter_var(x, val):
     elif is_string_dtype(x):
         res = np.isin(x, val)
     elif is_datetime64_dtype(x):
-        print(val)
         res = (~np.isnan(x)) & \
             (x >= datetime.combine(val[0], datetime.min.time())) & \
             (x <= datetime.combine(val[1], datetime.max.time()))
@@ -901,3 +898,4 @@ def server(input, output, session):
 
 app = App(app_ui, server)
 ```
+
