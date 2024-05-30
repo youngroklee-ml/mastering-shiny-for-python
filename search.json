@@ -32,7 +32,7 @@
     "href": "basic-app.html#running-and-stopping",
     "title": "Your first Shiny app",
     "section": "Running and stopping",
-    "text": "Running and stopping\n\nRun app\n\nClick ‘Run Shiny App’ button on VS Code that comes with Shiny for Python extension\n\n\n\n\nRun Shiny App button on VS Code\n\n\n\nIn terminal, like zsh, type shiny run {filename} where {filename} should be replaced with python filename with its path, e.g. shiny run examples/basic-app/hello-world/app.py\n\n\n\nStop the app\nIn terminal that Shiny is running, press Ctrl+C"
+    "text": "Running and stopping\n\nRun app\n\nClick ‘Run Shiny App’ button on VS Code that comes with Shiny extension for VS Code\n\n\n\n\nRun Shiny App button on VS Code\n\n\n\nIn terminal, like zsh, type shiny run {filename} where {filename} should be replaced with python filename with its path, e.g. shiny run examples/basic-app/hello-world/app.py\n\n\n\nStop the app\nIn terminal that Shiny is running, press Ctrl+C"
   },
   {
     "objectID": "basic-app.html#adding-ui-controls",
