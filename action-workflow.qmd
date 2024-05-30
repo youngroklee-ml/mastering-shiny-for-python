@@ -26,7 +26,7 @@ app = App(app_ui, server)
 ```
 
 ::: {.callout-note}
-**`shinyapp`** snippet is available with installation of VS Code [Shiny for Python extention](https://marketplace.visualstudio.com/items?itemName=posit.shiny-python).
+**`shinyapp`** snippet is available with installation of [Shiny extension for VS Code](https://marketplace.visualstudio.com/items?itemName=posit.shiny).
 :::
 
 ::: {.callout-note}
