@@ -19,7 +19,7 @@ app = App(app_ui, server)
 
 ### Run app
 
-- Click 'Run Shiny App' button on VS Code that comes with [Shiny for Python extension](https://marketplace.visualstudio.com/items?itemName=posit.shiny-python)
+- Click 'Run Shiny App' button on VS Code that comes with [Shiny extension for VS Code](https://marketplace.visualstudio.com/items?itemName=posit.shiny)
 
 ![Run Shiny App button on VS Code](images/basic-app/run-app-button.png)
 
