@@ -1,15 +1,19 @@
 # Preface {.unnumbered}
 
-This material shows how to use [Shiny for Python](https://shiny.posit.co/py/) to implement example apps and exerciese solutions for Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/), which were originally implemented in R. My material will contain mostly only codes with few additional specific details of Shiny for Python, while it does not contain comprehensive explanation about Shiny framework. To understand Shiny framework, I highly recommend you to read Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/) first, which [online version](https://mastering-shiny.org) is also available.
+This material demonstrates how to use [Shiny for Python](https://shiny.posit.co/py/) to implement example applications and solutions for exercises found in Hadley Wickham's book [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/). These exercises were originally implemented in R.
 
-The followings are materials that I referenced while creating this material:
+This resource primarily focuses on code examples, with minimal additional details about Shiny for Python itself. It does not provide a comprehensive explantion of the Shiny frame.
+
+To gain a thorough understanding of the Shiny framework, I highly recommend reading Hadley Wickham's [Mastering Shiny](https://www.oreilly.com/library/view/mastering-shiny/9781492047377/). An [online version](https://mastering-shiny.org) is also available.
+
+The following material were referenced while creating this resource:
 
 - [Mastering Shiny](https://mastering-shiny.org) by Hadley Wickham
 - [Learn Shiny](https://shiny.posit.co/py/docs/overview.html) by Posit Inc. on Shiny for Python website
 - [Shiny R to Python translation guide](https://gist.github.com/wch/616934a6fe57636434154c112ac8a718) by Winston Chang
 - [Change Log for Shiny for Python](https://github.com/posit-dev/py-shiny/blob/main/CHANGELOG.md)
 
-Also, I got answers from Shiny community on Discord when I asked questions about implementing several examples. I appreciate great helps from Gordon Shotwell, Joe Cheng, and the community!
+I also received valuable assistance from the Shiny community on Discord when I asked questions about implementing several examples. A special thank you to Gordon Shotwell, Joe Cheng, and the entire community for their great help!
 
 Computation environment is as follows:
 
