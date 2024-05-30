@@ -33,5 +33,5 @@ with open('requirements.txt', 'r') as f:
 
 ### VS Code extensions
 
-- [Shiny for Python](https://marketplace.visualstudio.com/items?itemName=posit.shiny-python)
+- [Shiny extension for VS Code](https://marketplace.visualstudio.com/items?itemName=posit.shiny)
 
